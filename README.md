@@ -1,36 +1,126 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Elephant Project
 
-## Getting Started
+A modern Next.js application with TypeScript, Tailwind CSS, shadcn/ui components, and Supabase backend.
 
-First, run the development server:
+## Tech Stack
+
+- **Framework**: Next.js 16+ with TypeScript
+- **Styling**: Tailwind CSS v4
+- **UI Components**: shadcn/ui
+- **Database**: Supabase
+- **Package Manager**: npm
+
+## Quick Start
+
+### 1. Install Dependencies
+
+```bash
+npm install
+```
+
+### 2. Configure Supabase
+
+Create a `.env.local` file in the root directory:
+
+```env
+NEXT_PUBLIC_SUPABASE_URL=your_supabase_project_url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+```
+
+Get these values from your [Supabase project dashboard](https://app.supabase.com).
+
+### 3. Run Development Server
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Project Structure
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```
+src/
+├── app/                    # Next.js App Router
+│   ├── layout.tsx         # Root layout
+│   ├── page.tsx           # Home page
+│   ├── globals.css        # Global styles
+│   └── favicon.ico
+├── components/            # React components
+│   └── ui/               # shadcn/ui components
+├── lib/                  # Utility functions
+│   ├── supabase.ts      # Supabase client
+│   └── utils.ts         # Helper utilities
+```
 
-## Learn More
+## Available Scripts
 
-To learn more about Next.js, take a look at the following resources:
+- `npm run dev` - Start development server
+- `npm run build` - Build for production
+- `npm run start` - Start production server
+- `npm run lint` - Run ESLint
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Adding shadcn/ui Components
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Use the shadcn CLI to add new components:
 
-## Deploy on Vercel
+```bash
+npx shadcn@latest add [component-name]
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Example:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```bash
+npx shadcn@latest add button
+npx shadcn@latest add card
+npx shadcn@latest add input
+```
+
+## Using Supabase
+
+Example: Fetch data from your Supabase table
+
+```typescript
+import { supabase } from "@/lib/supabase";
+
+// In an async function or Server Component
+const { data, error } = await supabase.from("your_table_name").select("*");
+
+if (error) {
+  console.error("Error fetching data:", error);
+} else {
+  console.log("Data:", data);
+}
+```
+
+## Environment Variables
+
+The following environment variables are used:
+
+- `NEXT_PUBLIC_SUPABASE_URL` - Your Supabase project URL (exposed to browser)
+- `NEXT_PUBLIC_SUPABASE_ANON_KEY` - Your Supabase anonymous key (exposed to browser)
+
+**Important**: The `.env.local` file is git-ignored and should never be committed. Store secrets securely.
+
+## Deployment
+
+This project is ready to deploy on Vercel, Netlify, or any Node.js hosting platform.
+
+### Vercel (Recommended)
+
+1. Push your code to GitHub
+2. Connect your repository to [Vercel](https://vercel.com)
+3. Add environment variables in Vercel dashboard
+4. Deploy
+
+## Learning Resources
+
+- [Next.js Documentation](https://nextjs.org/docs)
+- [Tailwind CSS](https://tailwindcss.com/docs)
+- [shadcn/ui](https://ui.shadcn.com)
+- [Supabase Documentation](https://supabase.com/docs)
+- [TypeScript Handbook](https://www.typescriptlang.org/docs/)
+
+## License
+
+MIT

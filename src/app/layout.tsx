@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import Link from "next/link";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -25,9 +26,33 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased dark`}
+      style={
+        {
+          "--font-sans": "var(--font-geist-sans)",
+        } as React.CSSProperties
+      }
     >
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full flex flex-col bg-black text-white">
+        <nav className="bg-black border-b border-gray-800 px-8 py-4 flex items-center justify-between">
+          <h1 className="text-lg font-bold">Elephant</h1>
+          <div className="flex gap-3">
+            <Link
+              href="/auth?mode=signin"
+              className="inline-flex h-8 items-center justify-center rounded-lg border border-gray-600 px-2.5 text-sm font-medium text-white transition-colors hover:bg-white/10"
+            >
+              Sign In
+            </Link>
+            <Link
+              href="/auth?mode=signup"
+              className="inline-flex h-8 items-center justify-center rounded-lg border border-transparent bg-white px-2.5 text-sm font-medium text-black transition-colors hover:bg-gray-100"
+            >
+              Sign Up
+            </Link>
+          </div>
+        </nav>
+        {children}
+      </body>
     </html>
   );
 }
