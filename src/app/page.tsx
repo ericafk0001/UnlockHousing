@@ -4,10 +4,16 @@ import { InsightsCharts } from "@/components/insights-charts";
 export default function Home() {
   return (
     <>
-      <main className="relative isolate flex min-h-svh flex-1 items-center overflow-visible px-4 py-6 sm:px-6 lg:px-10">
+      <main
+        data-scroll-section
+        className="relative isolate flex min-h-svh flex-1 items-center overflow-visible px-4 py-6 sm:px-6 lg:px-10"
+      >
         <HeroOrbs />
 
-        <section className="relative z-10 w-full max-w-6xl lg:pr-[24vw] xl:pr-[28vw] 2xl:pr-[30vw]">
+        <section
+          data-fade-in
+          className="relative z-10 w-full max-w-6xl lg:pr-[24vw] xl:pr-[28vw] 2xl:pr-[30vw]"
+        >
           <div className="inline-flex items-center border border-border bg-muted/55 px-4 py-2 text-sm font-medium text-foreground/90">
             Connecting formerly incarcerated individuals
           </div>
@@ -37,10 +43,14 @@ export default function Home() {
 
       <section
         id="about"
+        data-scroll-section
         className="h-svh border-t border-black bg-white p-4 sm:p-6 lg:p-10"
       >
         <div className="mx-auto grid h-full w-full max-w-7xl gap-4 lg:grid-cols-2">
-          <article className="flex h-full flex-col rounded-[2.1rem] border border-black/8 bg-[#ded9d2] px-8 py-9 sm:px-10 sm:py-11">
+          <article
+            data-fade-in
+            className="flex h-full flex-col rounded-[2.1rem] border border-black/8 bg-[#ded9d2] px-8 py-9 sm:px-10 sm:py-11"
+          >
             <p className="max-w-[18ch] text-[clamp(2.05rem,3.8vw,3.7rem)] font-semibold leading-[1.04] tracking-tight text-[#1a1d23] text-pretty">
               People who have served their sentence are still widely treated as
               permanently dangerous.
@@ -52,7 +62,10 @@ export default function Home() {
             </p>
           </article>
 
-          <article className="flex h-full flex-col rounded-[2.1rem] border border-black/8 bg-[#cec6e5] px-8 py-9 sm:px-10 sm:py-11">
+          <article
+            data-fade-in
+            className="flex h-full flex-col rounded-[2.1rem] border border-black/8 bg-[#cec6e5] px-8 py-9 sm:px-10 sm:py-11"
+          >
             <p className="max-w-[22ch] text-[clamp(2.05rem,3.8vw,3.7rem)] font-semibold leading-[1.04] tracking-tight text-[#1a1d23] text-pretty">
               Unlock Housing creates a faster, fairer path into stable homes.
             </p>
@@ -66,15 +79,25 @@ export default function Home() {
         </div>
       </section>
 
-      <section id="insights" className="bg-white p-4 sm:p-6 lg:p-10">
+      <section
+        id="insights"
+        data-scroll-section
+        className="bg-white p-4 sm:p-6 lg:p-10"
+      >
         <div className="mx-auto w-full max-w-7xl">
-          <article className="flex flex-col rounded-[2.1rem] border border-black/8 bg-[#d8e7df] px-8 py-9 sm:px-10 sm:py-11">
+          <article
+            data-fade-in
+            className="flex flex-col rounded-[2.1rem] border border-black/8 bg-[#d8e7df] px-8 py-9 sm:px-10 sm:py-11"
+          >
             <p className="text-[clamp(2.25rem,4.4vw,4rem)] font-semibold leading-[1.03] tracking-tight text-[#1a1d23]">
               The data behind the housing gap
             </p>
 
             <div className="mt-8 grid auto-rows-min content-start gap-4">
-              <div className="rounded-2xl border border-black/10 bg-white/55 px-6 py-5">
+              <div
+                data-fade-in
+                className="rounded-2xl border border-black/10 bg-white/55 px-6 py-5"
+              >
                 <p className="text-[clamp(1.15rem,1.6vw,1.55rem)] leading-relaxed text-[#394046] text-pretty">
                   In interviews with formerly incarcerated people and their
                   family members, nearly 8 out of 10 report being denied housing
@@ -85,7 +108,10 @@ export default function Home() {
                 </p>
               </div>
 
-              <div className="rounded-2xl border border-black/10 bg-white/55 px-6 py-5">
+              <div
+                data-fade-in
+                className="rounded-2xl border border-black/10 bg-white/55 px-6 py-5"
+              >
                 <p className="text-[clamp(1.15rem,1.6vw,1.55rem)] leading-relaxed text-[#394046] text-pretty">
                   According to the Re-Entry Program Manager at the Pennsylvania
                   Department of Corrections, 983 incarcerated individuals were
@@ -94,7 +120,10 @@ export default function Home() {
                 </p>
               </div>
 
-              <div className="rounded-2xl border border-black/10 bg-white/55 px-6 py-5">
+              <div
+                data-fade-in
+                className="rounded-2xl border border-black/10 bg-white/55 px-6 py-5"
+              >
                 <p className="text-[clamp(1.15rem,1.6vw,1.55rem)] leading-relaxed text-[#394046] text-pretty">
                   Two-thirds of people released who did not have stable housing
                   were re-arrested within 12 months of release, compared with

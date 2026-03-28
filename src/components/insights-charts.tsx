@@ -78,12 +78,19 @@ export function InsightsCharts() {
   return (
     <section
       id="insights-data"
+      data-scroll-section
       className="bg-white px-4 pb-4 sm:px-6 sm:pb-6 lg:px-10 lg:pb-10"
     >
       <div className="mx-auto w-full max-w-7xl">
-        <div className="rounded-[2.1rem] border border-black/8 bg-[#f5f2eb] px-6 py-7 sm:px-8 sm:py-9 lg:px-10">
+        <div
+          data-fade-in
+          className="rounded-[2.1rem] border border-black/8 bg-[#f5f2eb] px-6 py-7 sm:px-8 sm:py-9 lg:px-10"
+        >
           <div className="grid gap-4 lg:grid-cols-2">
-            <article className="rounded-3xl border border-black/10 bg-white px-4 py-4 sm:px-5 sm:py-5">
+            <article
+              data-fade-in
+              className="rounded-3xl border border-black/10 bg-white px-4 py-4 sm:px-5 sm:py-5"
+            >
               <p className="text-lg font-semibold text-[#181c21] sm:text-xl">
                 Individuals Released Without Stable Housing
               </p>
@@ -134,7 +141,10 @@ export function InsightsCharts() {
               </div>
             </article>
 
-            <article className="rounded-3xl border border-black/10 bg-white px-4 py-4 sm:px-5 sm:py-5 lg:px-6">
+            <article
+              data-fade-in
+              className="rounded-3xl border border-black/10 bg-white px-4 py-4 sm:px-5 sm:py-5 lg:px-6"
+            >
               <p className="text-lg font-semibold text-[#181c21] sm:text-xl">
                 Individuals Released With Stable Housing
               </p>
