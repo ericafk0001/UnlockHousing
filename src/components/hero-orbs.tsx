@@ -32,16 +32,16 @@ export function HeroOrbs() {
     scene.add(orbCluster);
 
     const orbSpecs = [
-      { color: 0xff6b6b, radius: 5.1, orbit: 6.85, speed: 0.4, phase: 0 },
+      { color: 0xa7e8bd, radius: 5.1, orbit: 6.85, speed: 0.4, phase: 0 },
       {
-        color: 0x2563eb,
+        color: 0x3185fc,
         radius: 5.1,
         orbit: 6.15,
         speed: 0.4,
         phase: Math.PI * 0.66,
       },
       {
-        color: 0x10b981,
+        color: 0xff101f,
         radius: 5.1,
         orbit: 6.98,
         speed: 0.4,
