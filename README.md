@@ -1,4 +1,4 @@
-# Elephant Project
+# UnlockHousing
 
 A modern Next.js application with TypeScript, Tailwind CSS, shadcn/ui components, and Supabase backend.
 
