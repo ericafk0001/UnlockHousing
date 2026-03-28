@@ -141,17 +141,11 @@ export default function Home() {
         </section>
 
         <InsightsCharts />
-
-        <section
-          id="contact"
-          data-scroll-section
-          className="relative z-10 h-96 bg-transparent"
-        >
-          <span className="sr-only">Contact</span>
-        </section>
       </div>
 
-      <footer className="pointer-events-none fixed inset-x-0 bottom-0 z-0 h-96 border-t border-black/10 bg-[#1a1d23] text-white">
+      <div className="w-full" aria-hidden="true"></div>
+      <footer className="sticky bottom-0 z-0 h-170 border-t border-black/10 bg-[#1a1d23] text-white">
+        {" "}
         <div className="pointer-events-auto mx-auto flex h-full w-full max-w-7xl flex-col justify-between px-6 py-8 sm:px-8 sm:py-10 lg:px-10">
           <div>
             <p className="text-xs uppercase tracking-[0.2em] text-white/65">
