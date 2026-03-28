@@ -1,4 +1,5 @@
 import { HeroOrbs } from "@/components/hero-orbs";
+import { InsightsCharts } from "@/components/insights-charts";
 
 export default function Home() {
   return (
@@ -65,14 +66,14 @@ export default function Home() {
         </div>
       </section>
 
-      <section id="insights" className="h-[100svh] bg-white p-4 sm:p-6 lg:p-10">
+      <section id="insights" className="bg-white p-4 sm:p-6 lg:p-10">
         <div className="mx-auto w-full max-w-7xl">
           <article className="flex flex-col rounded-[2.1rem] border border-black/8 bg-[#d8e7df] px-8 py-9 sm:px-10 sm:py-11">
             <p className="text-[clamp(2.25rem,4.4vw,4rem)] font-semibold leading-[1.03] tracking-tight text-[#1a1d23]">
               The data behind the housing gap
             </p>
 
-            <div className="mt-8 grid auto-rows-min content-start gap-5 md:gap-6">
+            <div className="mt-8 grid auto-rows-min content-start gap-4">
               <div className="rounded-2xl border border-black/10 bg-white/55 px-6 py-5">
                 <p className="text-[clamp(1.15rem,1.6vw,1.55rem)] leading-relaxed text-[#394046] [text-wrap:pretty]">
                   In interviews with formerly incarcerated people and their
@@ -107,6 +108,8 @@ export default function Home() {
           </article>
         </div>
       </section>
+
+      <InsightsCharts />
     </>
   );
 }
