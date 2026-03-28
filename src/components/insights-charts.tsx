@@ -123,11 +123,11 @@ export function InsightsCharts() {
               </div>
             </article>
 
-            <article className="rounded-3xl border border-black/10 bg-white px-4 py-4 sm:px-5 sm:py-5 lg:px-6">
+            <article className="rounded-3xl border border-black/10 bg-white px-4 py-4 sm:px-5 sm:py-5 lg:px-6 flex flex-col">
               <p className="text-lg font-semibold text-[#181c21] sm:text-xl">
                 Individuals Released With Stable Housing
               </p>
-              <div className="mt-4 h-96 sm:h-80">
+              <div className="mt-4 flex-1 min-h-0">
                 <ChartContainer config={withHousingConfig}>
                   <PieChart margin={{ top: 0, right: 0, left: 0, bottom: 0 }}>
                     <Pie
