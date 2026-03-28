@@ -171,6 +171,24 @@ export default function Home() {
             <span>Philadelphia, PA</span>
           </div>
         </div>
+        <div className="absolute bottom-0 left-0 right-0 border-t border-black/10 bg-[#f4f4f4] px-6 py-7 text-[#1b1b1b] sm:px-8 lg:px-10">
+          <div className="mx-auto flex w-full max-w-7xl flex-col gap-4 text-[clamp(1.1rem,1.6vw,2rem)] sm:flex-row sm:items-center sm:justify-between">
+            <p className="font-medium">
+              ©2026 Unlock Housing All Rights Reserved.
+            </p>
+            <div className="flex flex-wrap items-center gap-x-10 gap-y-3">
+              <a href="#" className="transition-opacity hover:opacity-70">
+                Privacy Policy
+              </a>
+              <a href="#" className="transition-opacity hover:opacity-70">
+                Terms of Service
+              </a>
+              <a href="#" className="transition-opacity hover:opacity-70">
+                Accessibility
+              </a>
+            </div>
+          </div>
+        </div>
       </footer>
     </>
   );
