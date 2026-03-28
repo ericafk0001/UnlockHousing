@@ -52,9 +52,30 @@ const waitForImageUrl = (url: string) =>
     }
   });
 
+type LocomotiveInstance = {
+  destroy?: () => void;
+  update?: () => void;
+  resize?: () => void;
+};
+
+const refreshLocomotive = (instance: LocomotiveInstance | undefined) => {
+  if (!instance) {
+    return;
+  }
+
+  if (typeof instance.update === "function") {
+    instance.update();
+    return;
+  }
+
+  if (typeof instance.resize === "function") {
+    instance.resize();
+  }
+};
+
 export function ScrollEffects({ children }: { children: ReactNode }) {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
-  const locomotiveRef = useRef<{ destroy: () => void; update: () => void }>();
+  const locomotiveRef = useRef<LocomotiveInstance>();
   const pathname = usePathname();
   const [isReady, setIsReady] = useState(false);
   const [progress, setProgress] = useState(0);
@@ -145,7 +166,7 @@ export function ScrollEffects({ children }: { children: ReactNode }) {
       });
 
       window.setTimeout(() => {
-        locomotiveRef.current?.update();
+        refreshLocomotive(locomotiveRef.current);
       }, 250);
     };
 
@@ -157,7 +178,7 @@ export function ScrollEffects({ children }: { children: ReactNode }) {
         return;
       }
 
-      locomotiveRef.current?.destroy();
+      locomotiveRef.current?.destroy?.();
       locomotiveRef.current = undefined;
     };
   }, [isReady, pathname]);
@@ -209,7 +230,7 @@ export function ScrollEffects({ children }: { children: ReactNode }) {
     targets.forEach((target) => observer.observe(target));
 
     window.setTimeout(() => {
-      locomotiveRef.current?.update();
+      refreshLocomotive(locomotiveRef.current);
     }, 60);
 
     return () => {
