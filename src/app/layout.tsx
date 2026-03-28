@@ -51,20 +51,6 @@ export default function RootLayout({
               }}
             />
             <div className="absolute inset-0 backdrop-blur-[2px]" />
-            <div
-              className="absolute inset-0 bg-repeat opacity-[0.34] mix-blend-multiply"
-              style={{
-                backgroundImage: "url('/grain-noise.svg')",
-                backgroundSize: "190px 190px",
-              }}
-            />
-            <div
-              className="absolute inset-0 bg-repeat opacity-[0.15] mix-blend-soft-light"
-              style={{
-                backgroundImage: "url('/grain-noise.svg')",
-                backgroundSize: "130px 130px",
-              }}
-            />
           </div>
 
           <div className="relative z-10 flex min-h-full flex-col">
