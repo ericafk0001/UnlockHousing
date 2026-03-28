@@ -87,7 +87,7 @@ export function InsightsCharts() {
               <p className="text-lg font-semibold text-[#181c21] sm:text-xl">
                 Individuals Released Without Stable Housing
               </p>
-              <div className="mt-4 h-77.5">
+              <div className="mt-4 h-96">
                 <ChartContainer config={withoutHousingConfig}>
                   <BarChart
                     data={withoutHousingData}
@@ -138,7 +138,7 @@ export function InsightsCharts() {
               <p className="text-lg font-semibold text-[#181c21] sm:text-xl">
                 Individuals Released With Stable Housing
               </p>
-              <div className="mt-4 h-77.5">
+              <div className="mt-4 h-96">
                 <ChartContainer config={withHousingConfig}>
                   <PieChart margin={{ top: 0, right: 0, left: 0, bottom: 0 }}>
                     <Pie
