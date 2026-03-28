@@ -51,19 +51,30 @@ const withHousingConfig = {
   },
 } satisfies ChartConfig;
 
-export function InsightsCharts() {
-  const CustomPieTooltip = ({ active, payload }: any) => {
-    if (active && payload && payload.length) {
-      return (
-        <div className="rounded bg-white p-2 shadow-lg border border-gray-300">
-          <p className="font-semibold">{payload[0].payload.name}</p>
-          <p className="text-sm">{payload[0].value}%</p>
-        </div>
-      );
-    }
-    return null;
-  };
+interface CustomPieTooltipProps {
+  active?: boolean;
+  payload?: Array<{
+    payload: {
+      name: string;
+      value: number;
+    };
+    value: number;
+  }>;
+}
 
+const CustomPieTooltip = ({ active, payload }: CustomPieTooltipProps) => {
+  if (active && payload && payload.length) {
+    return (
+      <div className="rounded bg-white p-2 shadow-lg border border-gray-300">
+        <p className="font-semibold">{payload[0].payload.name}</p>
+        <p className="text-sm">{payload[0].value}%</p>
+      </div>
+    );
+  }
+  return null;
+};
+
+export function InsightsCharts() {
   return (
     <section
       id="insights-data"
@@ -123,11 +134,11 @@ export function InsightsCharts() {
               </div>
             </article>
 
-            <article className="rounded-3xl border border-black/10 bg-white px-4 py-4 sm:px-5 sm:py-5 lg:px-6 flex flex-col">
+            <article className="rounded-3xl border border-black/10 bg-white px-4 py-4 sm:px-5 sm:py-5 lg:px-6">
               <p className="text-lg font-semibold text-[#181c21] sm:text-xl">
                 Individuals Released With Stable Housing
               </p>
-              <div className="mt-4 flex-1 min-h-0">
+              <div className="mt-4 h-77.5">
                 <ChartContainer config={withHousingConfig}>
                   <PieChart margin={{ top: 0, right: 0, left: 0, bottom: 0 }}>
                     <Pie

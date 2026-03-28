@@ -4,7 +4,7 @@ import { InsightsCharts } from "@/components/insights-charts";
 export default function Home() {
   return (
     <>
-      <main className="relative isolate flex min-h-[100svh] flex-1 items-center overflow-visible px-4 py-6 sm:px-6 lg:px-10">
+      <main className="relative isolate flex min-h-svh flex-1 items-center overflow-visible px-4 py-6 sm:px-6 lg:px-10">
         <HeroOrbs />
 
         <section className="relative z-10 w-full max-w-6xl lg:pr-[24vw] xl:pr-[28vw] 2xl:pr-[30vw]">
@@ -18,7 +18,7 @@ export default function Home() {
             Transform for <span className="font-serif italic">growth.</span>
           </h1>
 
-          <p className="mt-6 max-w-[66ch] text-[clamp(1.05rem,1.8vw,1.45rem)] leading-relaxed text-foreground/75 [text-wrap:pretty] sm:mt-8">
+          <p className="mt-6 max-w-[66ch] text-[clamp(1.05rem,1.8vw,1.45rem)] leading-relaxed text-foreground/75 text-pretty sm:mt-8">
             A fair-chance housing platform connecting returning citizens with
             landlords through verified profiles that highlight stability,
             rehabilitation, and real potential—not just past records.
@@ -37,15 +37,15 @@ export default function Home() {
 
       <section
         id="about"
-        className="h-[100svh] border-t border-black bg-white p-4 sm:p-6 lg:p-10"
+        className="h-svh border-t border-black bg-white p-4 sm:p-6 lg:p-10"
       >
         <div className="mx-auto grid h-full w-full max-w-7xl gap-4 lg:grid-cols-2">
           <article className="flex h-full flex-col rounded-[2.1rem] border border-black/8 bg-[#ded9d2] px-8 py-9 sm:px-10 sm:py-11">
-            <p className="max-w-[18ch] text-[clamp(2.05rem,3.8vw,3.7rem)] font-semibold leading-[1.04] tracking-tight text-[#1a1d23] [text-wrap:pretty]">
+            <p className="max-w-[18ch] text-[clamp(2.05rem,3.8vw,3.7rem)] font-semibold leading-[1.04] tracking-tight text-[#1a1d23] text-pretty">
               People who have served their sentence are still widely treated as
               permanently dangerous.
             </p>
-            <p className="mt-7 max-w-[44ch] text-[clamp(1.18rem,1.9vw,1.95rem)] leading-[1.35] text-[#394046] [text-wrap:pretty]">
+            <p className="mt-7 max-w-[44ch] text-[clamp(1.18rem,1.9vw,1.95rem)] leading-[1.35] text-[#394046] text-pretty">
               That assumption shuts returning citizens out of housing and
               community, even when they have accepted responsibility and done
               the work to rebuild their lives.
@@ -53,10 +53,10 @@ export default function Home() {
           </article>
 
           <article className="flex h-full flex-col rounded-[2.1rem] border border-black/8 bg-[#cec6e5] px-8 py-9 sm:px-10 sm:py-11">
-            <p className="max-w-[22ch] text-[clamp(2.05rem,3.8vw,3.7rem)] font-semibold leading-[1.04] tracking-tight text-[#1a1d23] [text-wrap:pretty]">
+            <p className="max-w-[22ch] text-[clamp(2.05rem,3.8vw,3.7rem)] font-semibold leading-[1.04] tracking-tight text-[#1a1d23] text-pretty">
               Unlock Housing creates a faster, fairer path into stable homes.
             </p>
-            <p className="mt-7 max-w-[46ch] text-[clamp(1.18rem,1.9vw,1.95rem)] leading-[1.35] text-[#394046] [text-wrap:pretty]">
+            <p className="mt-7 max-w-[46ch] text-[clamp(1.18rem,1.9vw,1.95rem)] leading-[1.35] text-[#394046] text-pretty">
               UnlockHousing is a Zillow-style rental marketplace that connects
               homeowners and returning citizens through a trusted intermediary,
               streamlines applications, and gives applicants room to share their
@@ -75,7 +75,7 @@ export default function Home() {
 
             <div className="mt-8 grid auto-rows-min content-start gap-4">
               <div className="rounded-2xl border border-black/10 bg-white/55 px-6 py-5">
-                <p className="text-[clamp(1.15rem,1.6vw,1.55rem)] leading-relaxed text-[#394046] [text-wrap:pretty]">
+                <p className="text-[clamp(1.15rem,1.6vw,1.55rem)] leading-relaxed text-[#394046] text-pretty">
                   In interviews with formerly incarcerated people and their
                   family members, nearly 8 out of 10 report being denied housing
                   because of a criminal conviction, and access to affordable
@@ -86,7 +86,7 @@ export default function Home() {
               </div>
 
               <div className="rounded-2xl border border-black/10 bg-white/55 px-6 py-5">
-                <p className="text-[clamp(1.15rem,1.6vw,1.55rem)] leading-relaxed text-[#394046] [text-wrap:pretty]">
+                <p className="text-[clamp(1.15rem,1.6vw,1.55rem)] leading-relaxed text-[#394046] text-pretty">
                   According to the Re-Entry Program Manager at the Pennsylvania
                   Department of Corrections, 983 incarcerated individuals were
                   not released on their parole date over one year because they
@@ -95,7 +95,7 @@ export default function Home() {
               </div>
 
               <div className="rounded-2xl border border-black/10 bg-white/55 px-6 py-5">
-                <p className="text-[clamp(1.15rem,1.6vw,1.55rem)] leading-relaxed text-[#394046] [text-wrap:pretty]">
+                <p className="text-[clamp(1.15rem,1.6vw,1.55rem)] leading-relaxed text-[#394046] text-pretty">
                   Two-thirds of people released who did not have stable housing
                   were re-arrested within 12 months of release, compared with
                   only one-quarter of those who did have housing. When

@@ -64,7 +64,7 @@ export default function RootLayout({
 
         <div className="relative z-10 flex min-h-full flex-col">
           <div className="relative z-30 mt-4 flex justify-center px-3 sm:px-4 md:px-8 lg:px-14">
-            <nav className="flex w-full max-w-5xl flex-col items-center gap-3 rounded-xl border border-border bg-background/95 px-4 py-4 shadow-sm backdrop-blur supports-[backdrop-filter]:bg-background/80 md:grid md:grid-cols-[auto_1fr_auto] md:items-center md:gap-0 md:px-7">
+            <nav className="flex w-full max-w-5xl flex-col items-center gap-3 rounded-xl border border-border bg-background/95 px-4 py-4 shadow-sm backdrop-blur supports-backdrop-filter:bg-background/80 md:grid md:grid-cols-[auto_1fr_auto] md:items-center md:gap-0 md:px-7">
               <h1 className="text-xl font-bold md:text-2xl">UnlockHousing</h1>
               <div className="w-full justify-self-center px-0 md:w-auto md:px-4 lg:px-8">
                 <div className="flex flex-wrap items-center justify-center gap-2 md:gap-3">
