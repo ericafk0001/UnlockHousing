@@ -79,7 +79,7 @@ export function InsightsCharts() {
     <section
       id="insights-data"
       data-scroll-section
-      className="bg-white px-4 pb-4 sm:px-6 sm:pb-6 lg:px-10 lg:pb-10"
+      className="relative z-20 bg-white px-4 pb-4 sm:px-6 sm:pb-6 lg:px-10 lg:pb-10"
     >
       <div className="mx-auto w-full max-w-7xl">
         <div
