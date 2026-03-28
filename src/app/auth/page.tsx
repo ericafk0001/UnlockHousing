@@ -60,9 +60,9 @@ export default function AuthPage() {
 
   return (
     <main className="flex flex-1 items-center justify-center px-6 py-12">
-      <section className="w-full max-w-md rounded-2xl border border-gray-800 bg-gray-950/70 p-6 shadow-xl backdrop-blur">
+      <section className="w-full max-w-md rounded-2xl border border-border bg-card p-6 shadow-xl backdrop-blur">
         <h2 className="text-2xl font-semibold">Supabase Authentication</h2>
-        <p className="mt-2 text-sm text-gray-400">
+        <p className="mt-2 text-sm text-muted-foreground">
           {initialMode === "signin"
             ? "Welcome back. Sign in with your email and password."
             : "Create your account with email and password."}
@@ -72,7 +72,7 @@ export default function AuthPage() {
           <div className="space-y-2">
             <label
               htmlFor="email"
-              className="text-sm font-medium text-gray-200"
+              className="text-sm font-medium text-foreground"
             >
               Email
             </label>
@@ -82,7 +82,7 @@ export default function AuthPage() {
               autoComplete="email"
               value={email}
               onChange={(event) => setEmail(event.target.value)}
-              className="h-10 w-full rounded-md border border-gray-700 bg-gray-900 px-3 text-sm text-white outline-none ring-0 transition focus:border-gray-500"
+              className="h-10 w-full rounded-md border border-input bg-background px-3 text-sm text-foreground outline-none ring-0 transition focus:border-ring"
               placeholder="you@example.com"
             />
           </div>
@@ -90,7 +90,7 @@ export default function AuthPage() {
           <div className="space-y-2">
             <label
               htmlFor="password"
-              className="text-sm font-medium text-gray-200"
+              className="text-sm font-medium text-foreground"
             >
               Password
             </label>
@@ -100,7 +100,7 @@ export default function AuthPage() {
               autoComplete="current-password"
               value={password}
               onChange={(event) => setPassword(event.target.value)}
-              className="h-10 w-full rounded-md border border-gray-700 bg-gray-900 px-3 text-sm text-white outline-none ring-0 transition focus:border-gray-500"
+              className="h-10 w-full rounded-md border border-input bg-background px-3 text-sm text-foreground outline-none ring-0 transition focus:border-ring"
               placeholder="At least 6 characters"
             />
           </div>
@@ -115,7 +115,7 @@ export default function AuthPage() {
         </form>
 
         {message ? (
-          <p className="mt-4 text-sm text-gray-300">{message}</p>
+          <p className="mt-4 text-sm text-muted-foreground">{message}</p>
         ) : null}
       </section>
     </main>
