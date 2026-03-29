@@ -38,7 +38,8 @@ const listings: Listing[] = [
     supportNote: "Second-chance friendly landlord and flexible deposit plan.",
     lat: 39.9896,
     lng: -75.1426,
-    imageUrl: "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=400&h=300&fit=crop",
+    imageUrl:
+      "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=400&h=300&fit=crop",
   },
   {
     id: 2,
@@ -51,7 +52,8 @@ const listings: Listing[] = [
     supportNote: "Partnered with local case managers and job services.",
     lat: 39.9526,
     lng: -75.2205,
-    imageUrl: "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=400&h=300&fit=crop",
+    imageUrl:
+      "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=400&h=300&fit=crop",
   },
   {
     id: 3,
@@ -64,7 +66,8 @@ const listings: Listing[] = [
     supportNote: "Co-signer alternatives available through community partners.",
     lat: 39.9945,
     lng: -75.1299,
-    imageUrl: "https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=400&h=300&fit=crop",
+    imageUrl:
+      "https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=400&h=300&fit=crop",
   },
   {
     id: 4,
@@ -77,7 +80,8 @@ const listings: Listing[] = [
     supportNote: "No blanket background denial policy.",
     lat: 39.9286,
     lng: -75.1629,
-    imageUrl: "https://images.unsplash.com/photo-1545324418-cc1a9a6fded0?w=400&h=300&fit=crop",
+    imageUrl:
+      "https://images.unsplash.com/photo-1545324418-cc1a9a6fded0?w=400&h=300&fit=crop",
   },
   {
     id: 5,
@@ -90,7 +94,8 @@ const listings: Listing[] = [
     supportNote: "Application fee waived for referred applicants.",
     lat: 40.0406,
     lng: -75.1387,
-    imageUrl: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=300&fit=crop",
+    imageUrl:
+      "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=300&fit=crop",
   },
   {
     id: 6,
@@ -103,7 +108,8 @@ const listings: Listing[] = [
     supportNote: "Inclusive community focus, supportive management team.",
     lat: 39.9659,
     lng: -75.1372,
-    imageUrl: "https://images.unsplash.com/photo-1493857671505-72967e2e2760?w=400&h=300&fit=crop",
+    imageUrl:
+      "https://images.unsplash.com/photo-1493857671505-72967e2e2760?w=400&h=300&fit=crop",
   },
   {
     id: 7,
@@ -116,7 +122,8 @@ const listings: Listing[] = [
     supportNote: "Walking distance to public transit and resources.",
     lat: 39.9495,
     lng: -75.1933,
-    imageUrl: "https://images.unsplash.com/photo-1675675784246-f2147bbed60d?w=400&h=300&fit=crop",
+    imageUrl:
+      "https://images.unsplash.com/photo-1675675784246-f2147bbed60d?w=400&h=300&fit=crop",
   },
   {
     id: 8,
@@ -129,7 +136,8 @@ const listings: Listing[] = [
     supportNote: "Family-friendly building with on-site support services.",
     lat: 40.0614,
     lng: -75.0651,
-    imageUrl: "https://images.unsplash.com/photo-1568605114967-8130f3a36994?w=400&h=300&fit=crop",
+    imageUrl:
+      "https://images.unsplash.com/photo-1568605114967-8130f3a36994?w=400&h=300&fit=crop",
   },
 ];
 
@@ -157,7 +165,8 @@ const externalResources = [
   {
     label: "SEPTA Senior Fare Card",
     href: "https://wwww.septa.org/fares/senior-fare-card/",
-    description: "Affordable public transit options for seniors and eligible riders.",
+    description:
+      "Affordable public transit options for seniors and eligible riders.",
   },
   {
     label: "SEPTA Reduced Fare Program",
@@ -167,7 +176,8 @@ const externalResources = [
   {
     label: "PENN CAMP Reentry Citizens",
     href: "https://penncamp.org/re-entry-citizens/",
-    description: "Community advocacy and support for formerly incarcerated individuals.",
+    description:
+      "Community advocacy and support for formerly incarcerated individuals.",
   },
 ];
 
@@ -433,7 +443,10 @@ export default function Homepage() {
                 backfaceVisibility: "hidden",
               }}
             >
-              <MapComponent listings={listings} onPinClick={setSelectedListing} />
+              <MapComponent
+                listings={listings}
+                onPinClick={setSelectedListing}
+              />
 
               <aside
                 className="max-h-[520px] space-y-3 overflow-y-auto rounded-2xl border border-sky-200/80 bg-white/85 p-3 shadow-[0_8px_24px_rgba(2,132,199,0.08)]"
@@ -475,7 +488,14 @@ export default function Homepage() {
                     </p>
 
                     <div className="mt-3 flex items-center gap-2">
-                      <Button type="button" className="h-9 px-3 text-xs" onClick={(e) => { e.stopPropagation(); setSelectedListing(listing); }}>
+                      <Button
+                        type="button"
+                        className="h-9 px-3 text-xs"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setSelectedListing(listing);
+                        }}
+                      >
                         Request intro
                       </Button>
                       <Button
@@ -536,7 +556,9 @@ export default function Homepage() {
                       <div className="text-center">
                         <p className="text-xs text-slate-500">Bedrooms</p>
                         <p className="text-2xl font-bold text-slate-900">
-                          {selectedListing.beds === 0 ? "Studio" : selectedListing.beds}
+                          {selectedListing.beds === 0
+                            ? "Studio"
+                            : selectedListing.beds}
                         </p>
                       </div>
                       <div className="text-center">
@@ -566,7 +588,11 @@ export default function Homepage() {
                       <Button type="button" className="flex-1">
                         Request Introduction
                       </Button>
-                      <Button type="button" variant="outline" className="flex-1">
+                      <Button
+                        type="button"
+                        variant="outline"
+                        className="flex-1"
+                      >
                         Save Listing
                       </Button>
                     </div>
