@@ -83,7 +83,7 @@ export function ScrollEffects({ children }: { children: ReactNode }) {
   const [progress, setProgress] = useState(0);
 
   useEffect(() => {
-    if (isAccessibilityRoute) {
+    if (isAccessibilityRoute || !isLandingRoute) {
       setProgress(100);
       setIsReady(true);
       return;
@@ -124,7 +124,7 @@ export function ScrollEffects({ children }: { children: ReactNode }) {
     return () => {
       cancelled = true;
     };
-  }, [isAccessibilityRoute]);
+  }, [isAccessibilityRoute, isLandingRoute]);
 
   useEffect(() => {
     const navbar = document.querySelector<HTMLElement>("[data-navbar]");
@@ -151,7 +151,7 @@ export function ScrollEffects({ children }: { children: ReactNode }) {
   }, [isReady, pathname, isAccessibilityRoute, isLandingRoute]);
 
   useEffect(() => {
-    if (!isReady) {
+    if (!isReady || !isLandingRoute || isAccessibilityRoute) {
       return;
     }
 
@@ -163,6 +163,14 @@ export function ScrollEffects({ children }: { children: ReactNode }) {
     let cancelled = false;
 
     const initLocomotive = async () => {
+      const reducedMotion = window.matchMedia(
+        "(prefers-reduced-motion: reduce)",
+      ).matches;
+      const isMacPlatform = /Mac|iPhone|iPad|iPod/.test(navigator.platform);
+      if (reducedMotion || isMacPlatform) {
+        return;
+      }
+
       const locomotiveModule = await import("locomotive-scroll");
       if (cancelled) {
         return;
@@ -173,9 +181,9 @@ export function ScrollEffects({ children }: { children: ReactNode }) {
       locomotiveRef.current = new LocomotiveScroll({
         el: container,
         smooth: true,
-        lerp: 0.08,
-        smartphone: { smooth: true },
-        tablet: { smooth: true },
+        lerp: 0.12,
+        smartphone: { smooth: false },
+        tablet: { smooth: false },
       } as any);
 
       window.setTimeout(() => {
@@ -187,17 +195,13 @@ export function ScrollEffects({ children }: { children: ReactNode }) {
 
     return () => {
       cancelled = true;
-      if (pathname === "/") {
-        return;
-      }
-
       locomotiveRef.current?.destroy?.();
       locomotiveRef.current = undefined;
     };
   }, [isReady, pathname, isAccessibilityRoute]);
 
   useLayoutEffect(() => {
-    if (!isReady || isAccessibilityRoute) {
+    if (!isReady || isAccessibilityRoute || !isLandingRoute) {
       return;
     }
 
@@ -249,11 +253,11 @@ export function ScrollEffects({ children }: { children: ReactNode }) {
     return () => {
       observer.disconnect();
     };
-  }, [isReady, pathname, isAccessibilityRoute]);
+  }, [isReady, pathname, isAccessibilityRoute, isLandingRoute]);
 
   return (
     <>
-      {!isAccessibilityRoute && (
+      {isLandingRoute && !isAccessibilityRoute && (
         <div
           aria-hidden={isReady}
           className={`fixed inset-0 z-80 flex items-center justify-center bg-white transition-opacity duration-500 ${
@@ -277,7 +281,10 @@ export function ScrollEffects({ children }: { children: ReactNode }) {
         </div>
       )}
 
-      <div ref={scrollContainerRef} data-scroll-container>
+      <div
+        ref={isLandingRoute ? scrollContainerRef : null}
+        data-scroll-container={isLandingRoute ? "true" : undefined}
+      >
         {children}
       </div>
     </>

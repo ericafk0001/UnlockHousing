@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import dynamic from "next/dynamic";
 import { Button } from "@/components/ui/button";
 import { createSupabaseBrowserClient } from "@/lib/supabase";
 
@@ -20,14 +21,9 @@ type Listing = {
   baths: number;
   sqft: number;
   supportNote: string;
-};
-
-type MapPin = {
-  id: number;
-  top: string;
-  left: string;
-  rent: number;
-  featured?: boolean;
+  lat: number;
+  lng: number;
+  imageUrl: string;
 };
 
 const listings: Listing[] = [
@@ -40,6 +36,9 @@ const listings: Listing[] = [
     baths: 1,
     sqft: 860,
     supportNote: "Second-chance friendly landlord and flexible deposit plan.",
+    lat: 39.9896,
+    lng: -75.1426,
+    imageUrl: "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=400&h=300&fit=crop",
   },
   {
     id: 2,
@@ -50,6 +49,9 @@ const listings: Listing[] = [
     baths: 1,
     sqft: 420,
     supportNote: "Partnered with local case managers and job services.",
+    lat: 39.9526,
+    lng: -75.2205,
+    imageUrl: "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=400&h=300&fit=crop",
   },
   {
     id: 3,
@@ -60,6 +62,9 @@ const listings: Listing[] = [
     baths: 1,
     sqft: 980,
     supportNote: "Co-signer alternatives available through community partners.",
+    lat: 39.9945,
+    lng: -75.1299,
+    imageUrl: "https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=400&h=300&fit=crop",
   },
   {
     id: 4,
@@ -70,6 +75,9 @@ const listings: Listing[] = [
     baths: 1,
     sqft: 590,
     supportNote: "No blanket background denial policy.",
+    lat: 39.9286,
+    lng: -75.1629,
+    imageUrl: "https://images.unsplash.com/photo-1545324418-cc1a9a6fded0?w=400&h=300&fit=crop",
   },
   {
     id: 5,
@@ -80,18 +88,49 @@ const listings: Listing[] = [
     baths: 1,
     sqft: 760,
     supportNote: "Application fee waived for referred applicants.",
+    lat: 40.0406,
+    lng: -75.1387,
+    imageUrl: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=300&fit=crop",
   },
-];
-
-const mapPins: MapPin[] = [
-  { id: 1, top: "24%", left: "56%", rent: 640, featured: true },
-  { id: 2, top: "35%", left: "42%", rent: 890 },
-  { id: 3, top: "48%", left: "51%", rent: 780 },
-  { id: 4, top: "58%", left: "60%", rent: 735 },
-  { id: 5, top: "66%", left: "43%", rent: 820 },
-  { id: 6, top: "39%", left: "63%", rent: 710 },
-  { id: 7, top: "30%", left: "34%", rent: 695 },
-  { id: 8, top: "72%", left: "55%", rent: 760 },
+  {
+    id: 6,
+    title: "Modern 2BR Loft",
+    neighborhood: "Fishtown",
+    rent: 950,
+    beds: 2,
+    baths: 1.5,
+    sqft: 850,
+    supportNote: "Inclusive community focus, supportive management team.",
+    lat: 39.9659,
+    lng: -75.1372,
+    imageUrl: "https://images.unsplash.com/photo-1493857671505-72967e2e2760?w=400&h=300&fit=crop",
+  },
+  {
+    id: 7,
+    title: "Studio Near Center City",
+    neighborhood: "University City",
+    rent: 725,
+    beds: 0,
+    baths: 1,
+    sqft: 500,
+    supportNote: "Walking distance to public transit and resources.",
+    lat: 39.9495,
+    lng: -75.1933,
+    imageUrl: "https://images.unsplash.com/photo-1675675784246-f2147bbed60d?w=400&h=300&fit=crop",
+  },
+  {
+    id: 8,
+    title: "Spacious 3BR Townhouse",
+    neighborhood: "Northeast Philadelphia",
+    rent: 1100,
+    beds: 3,
+    baths: 2,
+    sqft: 1200,
+    supportNote: "Family-friendly building with on-site support services.",
+    lat: 40.0614,
+    lng: -75.0651,
+    imageUrl: "https://images.unsplash.com/photo-1568605114967-8130f3a36994?w=400&h=300&fit=crop",
+  },
 ];
 
 const externalResources = [
@@ -118,8 +157,7 @@ const externalResources = [
   {
     label: "SEPTA Senior Fare Card",
     href: "https://wwww.septa.org/fares/senior-fare-card/",
-    description:
-      "Affordable public transit options for seniors and eligible riders.",
+    description: "Affordable public transit options for seniors and eligible riders.",
   },
   {
     label: "SEPTA Reduced Fare Program",
@@ -129,10 +167,13 @@ const externalResources = [
   {
     label: "PENN CAMP Reentry Citizens",
     href: "https://penncamp.org/re-entry-citizens/",
-    description:
-      "Community advocacy and support for formerly incarcerated individuals.",
+    description: "Community advocacy and support for formerly incarcerated individuals.",
   },
 ];
+
+const MapComponent = dynamic(() => import("@/components/interactive-map"), {
+  ssr: false,
+});
 
 const resolveAvatarDisplayUrl = async (
   supabase: ReturnType<typeof createSupabaseBrowserClient>,
@@ -168,6 +209,7 @@ export default function Homepage() {
   const [searchQuery, setSearchQuery] = useState("Philadelphia, PA");
   const [activeFilter, setActiveFilter] = useState("Lowest Rent");
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [selectedListing, setSelectedListing] = useState<Listing | null>(null);
 
   useEffect(() => {
     setSupabase(createSupabaseBrowserClient());
@@ -253,22 +295,22 @@ export default function Homepage() {
       ) : null}
 
       <aside
-        className={`fixed left-0 top-0 z-50 h-full w-[320px] border-r border-border bg-background/95 p-4 shadow-xl backdrop-blur transition-transform duration-300 ${
+        className={`fixed left-0 top-0 z-50 h-full w-[320px] border-r border-emerald-200/70 bg-white/95 p-4 shadow-xl backdrop-blur transition-transform duration-300 will-change-transform ${
           isSidebarOpen ? "translate-x-0" : "-translate-x-full"
         }`}
         aria-label="External housing resources"
       >
         <div className="flex items-center justify-between">
-          <h2 className="text-base font-semibold text-foreground">Resources</h2>
+          <h2 className="text-base font-semibold text-slate-900">Resources</h2>
           <button
             type="button"
             onClick={() => setIsSidebarOpen(false)}
-            className="rounded-md border border-input px-2 py-1 text-sm text-foreground hover:bg-muted"
+            className="rounded-md border border-emerald-200 bg-emerald-50 px-2 py-1 text-sm text-emerald-900 transition hover:bg-emerald-100"
           >
             Close
           </button>
         </div>
-        <p className="mt-2 text-sm text-muted-foreground">
+        <p className="mt-2 text-sm text-slate-600">
           Trusted external support links for housing, legal aid, and reentry.
         </p>
 
@@ -279,12 +321,12 @@ export default function Homepage() {
               href={resource.href}
               target="_blank"
               rel="noopener noreferrer"
-              className="block rounded-xl border border-border bg-card p-3 transition hover:bg-muted"
+              className="block rounded-xl border border-sky-200/80 bg-gradient-to-br from-white to-sky-50 p-3 transition hover:-translate-y-0.5 hover:border-emerald-300 hover:shadow-sm"
             >
-              <p className="text-sm font-semibold text-foreground">
+              <p className="text-sm font-semibold text-slate-900">
                 {resource.label}
               </p>
-              <p className="mt-1 text-xs text-muted-foreground">
+              <p className="mt-1 text-xs text-slate-600">
                 {resource.description}
               </p>
             </a>
@@ -292,7 +334,7 @@ export default function Homepage() {
         </div>
       </aside>
 
-      <main className="flex min-h-[calc(100svh-5rem)] w-full flex-col">
+      <main className="flex min-h-[calc(100svh-5rem)] w-full flex-col bg-gradient-to-b from-emerald-50/70 via-sky-50/60 to-amber-50/65">
         <section className="w-full">
           <div className="w-full">
             <div className="flex flex-wrap items-center justify-between gap-3 px-4 sm:px-6 lg:px-8 pt-4">
@@ -310,9 +352,14 @@ export default function Homepage() {
                   </span>
                 </button>
                 <div>
-                  <h1 className="text-xl font-semibold tracking-tight text-foreground sm:text-2xl">
-                    Housing Search
+                  <h1 className="text-xl font-semibold tracking-tight text-slate-900 sm:text-2xl">
+                    Fair-Chance Housing Search
                   </h1>
+                  <p className="mt-1 text-xs text-slate-600 sm:text-sm">
+                    {isLoading
+                      ? "Loading your dashboard..."
+                      : `Welcome back, ${displayName}. Affordable homes for formerly incarcerated neighbors.`}
+                  </p>
                 </div>
               </div>
 
@@ -321,13 +368,13 @@ export default function Homepage() {
                   href="https://resumebuilder.com/"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex h-10 items-center justify-center rounded-lg border border-transparent bg-foreground px-3 text-sm font-medium text-background transition hover:opacity-90"
+                  className="inline-flex h-10 items-center justify-center rounded-lg border border-emerald-700 bg-emerald-600 px-3 text-sm font-medium text-white transition hover:bg-emerald-700"
                 >
                   AI Resume Builder
                 </a>
                 <Link
                   href="/profile"
-                  className="inline-flex h-11 w-11 items-center justify-center overflow-hidden rounded-full border border-border bg-muted transition hover:opacity-90"
+                  className="inline-flex h-11 w-11 items-center justify-center overflow-hidden rounded-full border border-sky-300 bg-sky-100 transition hover:opacity-90"
                   aria-label="Open profile"
                   title="Profile"
                 >
@@ -338,7 +385,7 @@ export default function Homepage() {
                       className="h-full w-full object-cover"
                     />
                   ) : (
-                    <span className="text-sm font-semibold text-muted-foreground">
+                    <span className="text-sm font-semibold text-slate-700">
                       {displayName.slice(0, 1).toUpperCase() || "U"}
                     </span>
                   )}
@@ -350,15 +397,13 @@ export default function Homepage() {
             </div>
 
             <div className="mt-4 flex flex-wrap gap-2 px-4 sm:px-6 lg:px-8">
-              <label className="flex min-w-[220px] flex-1 items-center rounded-xl border border-input bg-background px-3">
-                <span className="mr-2 text-sm text-muted-foreground">
-                  Search
-                </span>
+              <label className="flex min-w-[220px] flex-1 items-center rounded-xl border border-sky-200 bg-white/90 px-3 shadow-sm">
+                <span className="mr-2 text-sm text-slate-600">Search</span>
                 <input
                   type="text"
                   value={searchQuery}
                   onChange={(event) => setSearchQuery(event.target.value)}
-                  className="h-11 w-full bg-transparent text-sm text-foreground outline-none"
+                  className="h-11 w-full bg-transparent text-sm text-slate-900 outline-none"
                   placeholder="City, zip, or neighborhood"
                 />
               </label>
@@ -371,8 +416,8 @@ export default function Homepage() {
                     onClick={() => setActiveFilter(filter)}
                     className={`rounded-xl border px-4 py-2.5 text-sm transition ${
                       activeFilter === filter
-                        ? "border-foreground bg-foreground text-background"
-                        : "border-input bg-background text-foreground hover:bg-muted"
+                        ? "border-emerald-700 bg-emerald-600 text-white"
+                        : "border-sky-200 bg-white/90 text-slate-700 hover:bg-sky-50"
                     }`}
                   >
                     {filter}
@@ -388,82 +433,56 @@ export default function Homepage() {
                 backfaceVisibility: "hidden",
               }}
             >
-              <div className="relative min-h-[520px] overflow-hidden rounded-2xl border border-border/80 bg-muted/50 will-change-auto">
-                <div className="absolute left-3 top-3 rounded-lg border border-border/80 bg-background/95 px-3 py-2 shadow-sm">
-                  <p className="text-xs font-medium text-muted-foreground">
-                    {activeFilter}
-                  </p>
-                  <p className="text-sm font-semibold text-foreground">
-                    {listings.length} affordable matches in {searchQuery}
-                  </p>
-                </div>
-
-                {mapPins.map((pin) => (
-                  <button
-                    key={pin.id}
-                    type="button"
-                    className={`absolute -translate-x-1/2 -translate-y-1/2 rounded-full border px-3 py-1 text-xs font-semibold shadow-sm transition hover:scale-105 ${
-                      pin.featured
-                        ? "border-emerald-700 bg-emerald-700 text-white"
-                        : "border-rose-800 bg-rose-700 text-white"
-                    }`}
-                    style={{ top: pin.top, left: pin.left }}
-                  >
-                    ${pin.rent}
-                  </button>
-                ))}
-
-                <div className="absolute bottom-3 right-3 rounded-xl border border-border/70 bg-background/95 px-3 py-2 text-xs text-muted-foreground">
-                  Map preview for housing clusters
-                </div>
-              </div>
+              <MapComponent listings={listings} onPinClick={setSelectedListing} />
 
               <aside
-                className="max-h-[520px] space-y-3 overflow-y-auto rounded-2xl border border-border/80 bg-muted/40 p-3 will-change-auto scrollbar-gutter-stable"
+                className="max-h-[520px] space-y-3 overflow-y-auto rounded-2xl border border-sky-200/80 bg-white/85 p-3 shadow-[0_8px_24px_rgba(2,132,199,0.08)]"
                 style={{
-                  scrollBehavior: "smooth",
                   WebkitOverflowScrolling: "touch",
-                  contain: "layout paint",
+                  contain: "strict",
+                  willChange: "scroll-position",
                 }}
               >
                 {listings.map((listing) => (
                   <article
                     key={listing.id}
-                    className="rounded-xl border border-border bg-background p-3 shadow-sm flex-shrink-0"
-                    style={{ contain: "content" }}
+                    className="cursor-pointer rounded-xl border border-sky-100 bg-gradient-to-br from-white to-emerald-50/40 p-3 shadow-sm transition hover:border-emerald-300 hover:shadow-md"
+                    style={{ contain: "paint", backfaceVisibility: "hidden" }}
+                    onClick={() => setSelectedListing(listing)}
                   >
                     <div>
-                      <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
+                      <p className="text-xs font-medium uppercase tracking-wide text-sky-700">
                         {listing.neighborhood}
                       </p>
-                      <h2 className="mt-1 text-base font-semibold text-foreground">
+                      <h2 className="mt-1 text-base font-semibold text-slate-900">
                         {listing.title}
                       </h2>
                     </div>
 
-                    <p className="mt-2 text-2xl font-semibold tracking-tight text-foreground">
+                    <p className="mt-2 text-2xl font-semibold tracking-tight text-emerald-700">
                       ${listing.rent}
-                      <span className="ml-1 text-sm font-medium text-muted-foreground">
+                      <span className="ml-1 text-sm font-medium text-slate-500">
                         /month
                       </span>
                     </p>
-                    <p className="mt-1 text-sm text-muted-foreground">
+                    <p className="mt-1 text-sm text-slate-600">
                       {listing.beds === 0 ? "Studio" : `${listing.beds} bd`} |{" "}
                       {listing.baths} ba | {listing.sqft} sqft
                     </p>
 
-                    <p className="mt-2 text-sm text-foreground/85">
+                    <p className="mt-2 text-sm text-slate-700">
                       {listing.supportNote}
                     </p>
 
                     <div className="mt-3 flex items-center gap-2">
-                      <Button type="button" className="h-9 px-3 text-xs">
+                      <Button type="button" className="h-9 px-3 text-xs" onClick={(e) => { e.stopPropagation(); setSelectedListing(listing); }}>
                         Request intro
                       </Button>
                       <Button
                         type="button"
                         variant="outline"
                         className="h-9 px-3 text-xs"
+                        onClick={(e) => e.stopPropagation()}
                       >
                         Save
                       </Button>
@@ -472,6 +491,89 @@ export default function Homepage() {
                 ))}
               </aside>
             </div>
+
+            {selectedListing && (
+              <div className="fixed inset-0 z-50 flex items-end justify-center bg-slate-900/35 p-4 sm:items-center">
+                <div className="max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-2xl border border-sky-200 bg-white shadow-xl">
+                  <div className="sticky top-0 z-10 flex items-center justify-between border-b border-sky-100 bg-gradient-to-r from-white via-sky-50 to-emerald-50 px-6 py-4 backdrop-blur">
+                    <h2 className="text-2xl font-semibold text-slate-900">
+                      {selectedListing.title}
+                    </h2>
+                    <button
+                      type="button"
+                      onClick={() => setSelectedListing(null)}
+                      className="rounded-lg border border-sky-200 bg-white px-3 py-2 text-sm text-slate-700 hover:bg-sky-50"
+                    >
+                      Close
+                    </button>
+                  </div>
+
+                  <div className="p-6 space-y-6">
+                    <img
+                      src={selectedListing.imageUrl}
+                      alt={selectedListing.title}
+                      loading="lazy"
+                      decoding="async"
+                      className="w-full h-64 object-cover rounded-xl border border-border"
+                    />
+
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <p className="text-sm text-slate-500">Location</p>
+                        <p className="text-lg font-semibold text-slate-900">
+                          {selectedListing.neighborhood}
+                        </p>
+                      </div>
+                      <div>
+                        <p className="text-sm text-slate-500">Monthly Rent</p>
+                        <p className="text-3xl font-bold text-emerald-700">
+                          ${selectedListing.rent}
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-3 gap-4 rounded-xl bg-gradient-to-r from-sky-50 to-emerald-50 p-4">
+                      <div className="text-center">
+                        <p className="text-xs text-slate-500">Bedrooms</p>
+                        <p className="text-2xl font-bold text-slate-900">
+                          {selectedListing.beds === 0 ? "Studio" : selectedListing.beds}
+                        </p>
+                      </div>
+                      <div className="text-center">
+                        <p className="text-xs text-slate-500">Bathrooms</p>
+                        <p className="text-2xl font-bold text-slate-900">
+                          {selectedListing.baths}
+                        </p>
+                      </div>
+                      <div className="text-center">
+                        <p className="text-xs text-slate-500">Sq. Ft.</p>
+                        <p className="text-2xl font-bold text-slate-900">
+                          {selectedListing.sqft}
+                        </p>
+                      </div>
+                    </div>
+
+                    <div>
+                      <h3 className="mb-2 font-semibold text-slate-900">
+                        Housing Support
+                      </h3>
+                      <p className="text-sm text-slate-700">
+                        {selectedListing.supportNote}
+                      </p>
+                    </div>
+
+                    <div className="flex gap-3">
+                      <Button type="button" className="flex-1">
+                        Request Introduction
+                      </Button>
+                      <Button type="button" variant="outline" className="flex-1">
+                        Save Listing
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
         </section>
       </main>
