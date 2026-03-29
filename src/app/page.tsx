@@ -149,7 +149,7 @@ export default function Home() {
           <div>
             <div className="group mt-3 flex w-full max-w-full flex-wrap items-center gap-4 perspective-[700px] sm:flex-nowrap sm:gap-6">
               <a
-                href="mailto:ninachenners@gmail.com"
+                href="/contact"
                 className="max-w-[11ch] min-w-0 text-[clamp(1.9rem,10vw,8.2rem)] font-semibold leading-[0.92] tracking-tight text-white transition-opacity hover:opacity-80"
               >
                 Contact Us
