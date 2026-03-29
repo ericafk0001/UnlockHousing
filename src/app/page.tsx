@@ -168,10 +168,13 @@ export default function Home() {
               ©2026 Unlock Housing All Rights Reserved.
             </p>
             <div className="flex flex-wrap items-center gap-x-5 gap-y-2 sm:gap-x-10 sm:gap-y-3">
-              <a href="#" className="transition-opacity hover:opacity-70">
+              <a
+                href="/privacy"
+                className="transition-opacity hover:opacity-70"
+              >
                 Privacy Policy
               </a>
-              <a href="#" className="transition-opacity hover:opacity-70">
+              <a href="/terms" className="transition-opacity hover:opacity-70">
                 Terms of Service
               </a>
               <a

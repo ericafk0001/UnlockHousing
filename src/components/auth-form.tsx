@@ -21,6 +21,7 @@ export function AuthForm() {
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [hasAcceptedPolicies, setHasAcceptedPolicies] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [oauthProviderLoading, setOauthProviderLoading] = useState<
     "google" | "apple" | null
@@ -54,6 +55,11 @@ export function AuthForm() {
 
     if (!isSignInMode && !hasSignUpDetails) {
       setMessage("First name, last name, and phone are required to sign up.");
+      return;
+    }
+
+    if (!isSignInMode && !hasAcceptedPolicies) {
+      setMessage("You must agree to the Terms of Service and Privacy Policy.");
       return;
     }
 
@@ -268,9 +274,44 @@ export function AuthForm() {
             />
           </div>
 
+          {!isSignInMode ? (
+            <label className="flex items-start gap-3 rounded-md border border-input/70 bg-background/70 p-3">
+              <input
+                type="checkbox"
+                checked={hasAcceptedPolicies}
+                onChange={(event) =>
+                  setHasAcceptedPolicies(event.target.checked)
+                }
+                className="mt-0.5 h-4 w-4 accent-foreground"
+                required
+              />
+              <span className="text-xs leading-5 text-muted-foreground">
+                I agree to the{" "}
+                <Link
+                  href="/terms"
+                  className="font-medium text-foreground underline underline-offset-2 hover:text-primary"
+                >
+                  Terms of Service
+                </Link>{" "}
+                and{" "}
+                <Link
+                  href="/privacy"
+                  className="font-medium text-foreground underline underline-offset-2 hover:text-primary"
+                >
+                  Privacy Policy
+                </Link>
+                .
+              </span>
+            </label>
+          ) : null}
+
           <Button
             type="submit"
-            disabled={isLoading || oauthProviderLoading !== null}
+            disabled={
+              isLoading ||
+              oauthProviderLoading !== null ||
+              (!isSignInMode && !hasAcceptedPolicies)
+            }
             className="mt-2 h-11 w-full"
           >
             {isLoading
@@ -279,26 +320,6 @@ export function AuthForm() {
                 ? "Sign In"
                 : "Create Account"}
           </Button>
-
-          {!isSignInMode ? (
-            <p className="text-center text-xs leading-5 text-muted-foreground">
-              By creating an account, you agree to our{" "}
-              <Link
-                href="/terms"
-                className="font-medium text-foreground underline underline-offset-2 hover:text-primary"
-              >
-                Terms of Service
-              </Link>{" "}
-              and{" "}
-              <Link
-                href="/privacy"
-                className="font-medium text-foreground underline underline-offset-2 hover:text-primary"
-              >
-                Privacy Policy
-              </Link>
-              .
-            </p>
-          ) : null}
         </form>
 
         {message ? (

@@ -77,8 +77,8 @@ export function ScrollEffects({ children }: { children: ReactNode }) {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const locomotiveRef = useRef<LocomotiveInstance | undefined>(undefined);
   const pathname = usePathname();
+  const isLandingRoute = pathname === "/";
   const isAccessibilityRoute = pathname === "/accessibility";
-  const isAuthRoute = pathname.startsWith("/auth");
   const [isReady, setIsReady] = useState(false);
   const [progress, setProgress] = useState(0);
 
@@ -127,22 +127,17 @@ export function ScrollEffects({ children }: { children: ReactNode }) {
   }, [isAccessibilityRoute]);
 
   useEffect(() => {
-    if (!isReady || isAccessibilityRoute) {
-      return;
-    }
-
     const navbar = document.querySelector<HTMLElement>("[data-navbar]");
     if (!navbar) {
       return;
     }
 
-    if (isAccessibilityRoute) {
+    if (!isLandingRoute || isAccessibilityRoute) {
       gsap.set(navbar, { autoAlpha: 1, y: 0 });
       return;
     }
 
-    if (isAuthRoute) {
-      gsap.set(navbar, { autoAlpha: 1, y: 0 });
+    if (!isReady) {
       return;
     }
 
@@ -153,7 +148,7 @@ export function ScrollEffects({ children }: { children: ReactNode }) {
       delay: 1.5,
       ease: "power3.out",
     });
-  }, [isReady, pathname, isAccessibilityRoute, isAuthRoute]);
+  }, [isReady, pathname, isAccessibilityRoute, isLandingRoute]);
 
   useEffect(() => {
     if (!isReady) {
