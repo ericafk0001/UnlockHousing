@@ -6,7 +6,7 @@ import { SiteNavbar } from "@/components/site-navbar";
 export function ConditionalNavbar() {
   const pathname = usePathname();
 
-  if (pathname === "/profile") {
+  if (pathname === "/profile" || pathname === "/resume") {
     return null;
   }
 

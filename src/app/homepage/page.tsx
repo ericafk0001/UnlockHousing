@@ -26,6 +26,38 @@ type Listing = {
   imageUrl: string;
 };
 
+type NewListingForm = {
+  listingTitle: string;
+  streetAddress: string;
+  neighborhood: string;
+  monthlyRent: string;
+  bedrooms: string;
+  bathrooms: string;
+  squareFeet: string;
+  contactEmail: string;
+  ownerFullName: string;
+  opaAccountNumber: string;
+  propertyLookupUrl: string;
+  supportNote: string;
+  certifyOwnership: boolean;
+};
+
+const defaultNewListingForm: NewListingForm = {
+  listingTitle: "",
+  streetAddress: "",
+  neighborhood: "",
+  monthlyRent: "",
+  bedrooms: "",
+  bathrooms: "",
+  squareFeet: "",
+  contactEmail: "",
+  ownerFullName: "",
+  opaAccountNumber: "",
+  propertyLookupUrl: "",
+  supportNote: "",
+  certifyOwnership: false,
+};
+
 const listings: Listing[] = [
   {
     id: 1,
@@ -220,6 +252,19 @@ export default function Homepage() {
   const [activeFilter, setActiveFilter] = useState("Lowest Rent");
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [selectedListing, setSelectedListing] = useState<Listing | null>(null);
+  const [pendingIntroduction, setPendingIntroduction] =
+    useState<Listing | null>(null);
+  const [requestSuccessMessage, setRequestSuccessMessage] = useState<
+    string | null
+  >(null);
+  const [isNewListingOpen, setIsNewListingOpen] = useState(false);
+  const [newListingForm, setNewListingForm] = useState<NewListingForm>(
+    defaultNewListingForm,
+  );
+  const [newListingError, setNewListingError] = useState<string | null>(null);
+  const [newListingSuccess, setNewListingSuccess] = useState<string | null>(
+    null,
+  );
 
   useEffect(() => {
     setSupabase(createSupabaseBrowserClient());
@@ -293,6 +338,57 @@ export default function Homepage() {
     router.replace("/");
   };
 
+  const handleRequestIntroduction = (listing: Listing) => {
+    setPendingIntroduction(listing);
+  };
+
+  const confirmIntroductionRequest = () => {
+    if (!pendingIntroduction) {
+      return;
+    }
+
+    setRequestSuccessMessage(
+      `Your introduction request for ${pendingIntroduction.title} has been recorded. A housing coordinator will follow up soon.`,
+    );
+    setPendingIntroduction(null);
+  };
+
+  const updateNewListingField = <K extends keyof NewListingForm>(
+    field: K,
+    value: NewListingForm[K],
+  ) => {
+    setNewListingForm((prev) => ({
+      ...prev,
+      [field]: value,
+    }));
+  };
+
+  const submitNewListing = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setNewListingError(null);
+
+    const lookupUrl = newListingForm.propertyLookupUrl.trim();
+    if (!/^https?:\/\/property\.phila\.gov/i.test(lookupUrl)) {
+      setNewListingError(
+        "Please include a valid property.phila.gov verification link.",
+      );
+      return;
+    }
+
+    if (!newListingForm.certifyOwnership) {
+      setNewListingError(
+        "You must certify that you are authorized to list this property.",
+      );
+      return;
+    }
+
+    setIsNewListingOpen(false);
+    setNewListingSuccess(
+      `Listing submission received for ${newListingForm.streetAddress}. Verification via property.phila.gov is marked as complete (proof of concept).`,
+    );
+    setNewListingForm(defaultNewListingForm);
+  };
+
   return (
     <>
       {isSidebarOpen ? (
@@ -363,7 +459,7 @@ export default function Homepage() {
                 </button>
                 <div>
                   <h1 className="text-xl font-semibold tracking-tight text-slate-900 sm:text-2xl">
-                    Fair-Chance Housing Search
+                    Housing Search
                   </h1>
                   <p className="mt-1 text-xs text-slate-600 sm:text-sm">
                     {isLoading
@@ -374,14 +470,22 @@ export default function Homepage() {
               </div>
 
               <div className="flex items-center gap-2">
-                <a
-                  href="https://resumebuilder.com/"
-                  target="_blank"
-                  rel="noopener noreferrer"
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => {
+                    setNewListingError(null);
+                    setIsNewListingOpen(true);
+                  }}
+                >
+                  New Listing
+                </Button>
+                <Link
+                  href="/resume"
                   className="inline-flex h-10 items-center justify-center rounded-lg border border-emerald-700 bg-emerald-600 px-3 text-sm font-medium text-white transition hover:bg-emerald-700"
                 >
                   AI Resume Builder
-                </a>
+                </Link>
                 <Link
                   href="/profile"
                   className="inline-flex h-11 w-11 items-center justify-center overflow-hidden rounded-full border border-sky-300 bg-sky-100 transition hover:opacity-90"
@@ -585,7 +689,13 @@ export default function Homepage() {
                     </div>
 
                     <div className="flex gap-3">
-                      <Button type="button" className="flex-1">
+                      <Button
+                        type="button"
+                        className="flex-1"
+                        onClick={() =>
+                          handleRequestIntroduction(selectedListing)
+                        }
+                      >
                         Request Introduction
                       </Button>
                       <Button
@@ -596,6 +706,399 @@ export default function Homepage() {
                         Save Listing
                       </Button>
                     </div>
+
+                    <p className="text-xs text-slate-500">
+                      Disclaimer: By requesting an introduction, you voluntarily
+                      agree to share your submitted contact and profile
+                      information with the housing provider.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {pendingIntroduction && (
+              <div className="fixed inset-0 z-[60] flex items-end justify-center bg-slate-900/45 p-4 sm:items-center">
+                <div className="w-full max-w-lg rounded-2xl border border-sky-200 bg-white shadow-2xl">
+                  <div className="border-b border-sky-100 px-5 py-4">
+                    <h3 className="text-lg font-semibold text-slate-900">
+                      Confirm Information Sharing
+                    </h3>
+                  </div>
+                  <div className="space-y-4 px-5 py-4">
+                    <p className="text-sm text-slate-700">
+                      You are requesting an introduction for{" "}
+                      <span className="font-semibold text-slate-900">
+                        {pendingIntroduction.title}
+                      </span>
+                      .
+                    </p>
+                    <p className="text-sm text-slate-700">
+                      By continuing, you voluntarily agree to share your
+                      submitted profile and contact information with this
+                      housing provider for application review.
+                    </p>
+                  </div>
+                  <div className="flex items-center justify-end gap-2 border-t border-sky-100 px-5 py-4">
+                    <Button
+                      type="button"
+                      variant="outline"
+                      onClick={() => setPendingIntroduction(null)}
+                    >
+                      Cancel
+                    </Button>
+                    <Button type="button" onClick={confirmIntroductionRequest}>
+                      I Agree, Continue
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {requestSuccessMessage && (
+              <div className="fixed inset-0 z-[60] flex items-end justify-center bg-slate-900/45 p-4 sm:items-center">
+                <div className="w-full max-w-lg rounded-2xl border border-emerald-200 bg-white shadow-2xl">
+                  <div className="border-b border-emerald-100 px-5 py-4">
+                    <h3 className="text-lg font-semibold text-slate-900">
+                      Request Sent
+                    </h3>
+                  </div>
+                  <div className="px-5 py-4">
+                    <p className="text-sm text-slate-700">
+                      {requestSuccessMessage}
+                    </p>
+                  </div>
+                  <div className="flex justify-end border-t border-emerald-100 px-5 py-4">
+                    <Button
+                      type="button"
+                      onClick={() => setRequestSuccessMessage(null)}
+                    >
+                      Close
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {isNewListingOpen && (
+              <div className="fixed inset-0 z-[60] flex items-end justify-center bg-slate-900/45 p-4 sm:items-center">
+                <div className="max-h-[90vh] w-full max-w-3xl overflow-y-auto rounded-2xl border border-sky-200 bg-white shadow-2xl">
+                  <div className="sticky top-0 z-10 flex items-center justify-between border-b border-sky-100 bg-gradient-to-r from-white via-sky-50 to-emerald-50 px-6 py-4">
+                    <h3 className="text-xl font-semibold text-slate-900">
+                      Submit New Listing
+                    </h3>
+                    <button
+                      type="button"
+                      className="rounded-lg border border-sky-200 bg-white px-3 py-2 text-sm text-slate-700 hover:bg-sky-50"
+                      onClick={() => setIsNewListingOpen(false)}
+                    >
+                      Close
+                    </button>
+                  </div>
+
+                  <form className="space-y-6 p-6" onSubmit={submitNewListing}>
+                    <div>
+                      <h4 className="text-sm font-semibold uppercase tracking-wide text-slate-700">
+                        Required Listing Details
+                      </h4>
+                      <p className="mt-1 text-xs text-slate-500">
+                        All fields below are required for this proof-of-concept
+                        listing intake.
+                      </p>
+                    </div>
+
+                    <div className="grid gap-4 sm:grid-cols-2">
+                      <label className="space-y-1 text-sm text-slate-700">
+                        <span>Listing Title *</span>
+                        <input
+                          required
+                          type="text"
+                          value={newListingForm.listingTitle}
+                          onChange={(event) =>
+                            updateNewListingField(
+                              "listingTitle",
+                              event.target.value,
+                            )
+                          }
+                          className="w-full rounded-lg border border-sky-200 px-3 py-2 outline-none focus:border-emerald-400"
+                          placeholder="2BR Row Home Near Transit"
+                        />
+                      </label>
+
+                      <label className="space-y-1 text-sm text-slate-700">
+                        <span>Street Address *</span>
+                        <input
+                          required
+                          type="text"
+                          value={newListingForm.streetAddress}
+                          onChange={(event) =>
+                            updateNewListingField(
+                              "streetAddress",
+                              event.target.value,
+                            )
+                          }
+                          className="w-full rounded-lg border border-sky-200 px-3 py-2 outline-none focus:border-emerald-400"
+                          placeholder="1234 W Girard Ave, Philadelphia, PA"
+                        />
+                      </label>
+
+                      <label className="space-y-1 text-sm text-slate-700">
+                        <span>Neighborhood *</span>
+                        <input
+                          required
+                          type="text"
+                          value={newListingForm.neighborhood}
+                          onChange={(event) =>
+                            updateNewListingField(
+                              "neighborhood",
+                              event.target.value,
+                            )
+                          }
+                          className="w-full rounded-lg border border-sky-200 px-3 py-2 outline-none focus:border-emerald-400"
+                          placeholder="North Philadelphia"
+                        />
+                      </label>
+
+                      <label className="space-y-1 text-sm text-slate-700">
+                        <span>Contact Email *</span>
+                        <input
+                          required
+                          type="email"
+                          value={newListingForm.contactEmail}
+                          onChange={(event) =>
+                            updateNewListingField(
+                              "contactEmail",
+                              event.target.value,
+                            )
+                          }
+                          className="w-full rounded-lg border border-sky-200 px-3 py-2 outline-none focus:border-emerald-400"
+                          placeholder="owner@example.com"
+                        />
+                      </label>
+
+                      <label className="space-y-1 text-sm text-slate-700">
+                        <span>Monthly Rent (USD) *</span>
+                        <input
+                          required
+                          min={1}
+                          type="number"
+                          value={newListingForm.monthlyRent}
+                          onChange={(event) =>
+                            updateNewListingField(
+                              "monthlyRent",
+                              event.target.value,
+                            )
+                          }
+                          className="w-full rounded-lg border border-sky-200 px-3 py-2 outline-none focus:border-emerald-400"
+                          placeholder="850"
+                        />
+                      </label>
+
+                      <label className="space-y-1 text-sm text-slate-700">
+                        <span>Bedrooms *</span>
+                        <input
+                          required
+                          min={0}
+                          type="number"
+                          value={newListingForm.bedrooms}
+                          onChange={(event) =>
+                            updateNewListingField(
+                              "bedrooms",
+                              event.target.value,
+                            )
+                          }
+                          className="w-full rounded-lg border border-sky-200 px-3 py-2 outline-none focus:border-emerald-400"
+                          placeholder="2"
+                        />
+                      </label>
+
+                      <label className="space-y-1 text-sm text-slate-700">
+                        <span>Bathrooms *</span>
+                        <input
+                          required
+                          min={0}
+                          step="0.5"
+                          type="number"
+                          value={newListingForm.bathrooms}
+                          onChange={(event) =>
+                            updateNewListingField(
+                              "bathrooms",
+                              event.target.value,
+                            )
+                          }
+                          className="w-full rounded-lg border border-sky-200 px-3 py-2 outline-none focus:border-emerald-400"
+                          placeholder="1"
+                        />
+                      </label>
+
+                      <label className="space-y-1 text-sm text-slate-700">
+                        <span>Square Feet *</span>
+                        <input
+                          required
+                          min={100}
+                          type="number"
+                          value={newListingForm.squareFeet}
+                          onChange={(event) =>
+                            updateNewListingField(
+                              "squareFeet",
+                              event.target.value,
+                            )
+                          }
+                          className="w-full rounded-lg border border-sky-200 px-3 py-2 outline-none focus:border-emerald-400"
+                          placeholder="860"
+                        />
+                      </label>
+                    </div>
+
+                    <label className="space-y-1 text-sm text-slate-700">
+                      <span>Housing Support Note *</span>
+                      <textarea
+                        required
+                        rows={3}
+                        value={newListingForm.supportNote}
+                        onChange={(event) =>
+                          updateNewListingField(
+                            "supportNote",
+                            event.target.value,
+                          )
+                        }
+                        className="w-full rounded-lg border border-sky-200 px-3 py-2 outline-none focus:border-emerald-400"
+                        placeholder="Describe fair-chance or supportive housing policies for applicants."
+                      />
+                    </label>
+
+                    <div className="rounded-xl border border-emerald-200 bg-emerald-50 p-4">
+                      <h4 className="text-sm font-semibold uppercase tracking-wide text-emerald-900">
+                        Ownership Verification (property.phila.gov)
+                      </h4>
+                      <p className="mt-1 text-xs text-emerald-800">
+                        Proof of concept: provide matching ownership details
+                        from property.phila.gov so this listing can be reviewed.
+                      </p>
+                      <a
+                        href="https://property.phila.gov/"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="mt-2 inline-flex text-xs font-medium text-emerald-900 underline"
+                      >
+                        Open property.phila.gov
+                      </a>
+
+                      <div className="mt-3 grid gap-4 sm:grid-cols-2">
+                        <label className="space-y-1 text-sm text-slate-700">
+                          <span>Owner Name on Record *</span>
+                          <input
+                            required
+                            type="text"
+                            value={newListingForm.ownerFullName}
+                            onChange={(event) =>
+                              updateNewListingField(
+                                "ownerFullName",
+                                event.target.value,
+                              )
+                            }
+                            className="w-full rounded-lg border border-emerald-200 bg-white px-3 py-2 outline-none focus:border-emerald-400"
+                            placeholder="Name listed on property record"
+                          />
+                        </label>
+
+                        <label className="space-y-1 text-sm text-slate-700">
+                          <span>OPA Account Number *</span>
+                          <input
+                            required
+                            type="text"
+                            value={newListingForm.opaAccountNumber}
+                            onChange={(event) =>
+                              updateNewListingField(
+                                "opaAccountNumber",
+                                event.target.value,
+                              )
+                            }
+                            className="w-full rounded-lg border border-emerald-200 bg-white px-3 py-2 outline-none focus:border-emerald-400"
+                            placeholder="123456700"
+                          />
+                        </label>
+                      </div>
+
+                      <label className="mt-4 block space-y-1 text-sm text-slate-700">
+                        <span>property.phila.gov Property Link *</span>
+                        <input
+                          required
+                          type="url"
+                          value={newListingForm.propertyLookupUrl}
+                          onChange={(event) =>
+                            updateNewListingField(
+                              "propertyLookupUrl",
+                              event.target.value,
+                            )
+                          }
+                          className="w-full rounded-lg border border-emerald-200 bg-white px-3 py-2 outline-none focus:border-emerald-400"
+                          placeholder="https://property.phila.gov/?p=..."
+                        />
+                      </label>
+
+                      <label className="mt-4 flex items-start gap-2 text-sm text-slate-700">
+                        <input
+                          required
+                          type="checkbox"
+                          checked={newListingForm.certifyOwnership}
+                          onChange={(event) =>
+                            updateNewListingField(
+                              "certifyOwnership",
+                              event.target.checked,
+                            )
+                          }
+                          className="mt-0.5 rounded"
+                        />
+                        <span>
+                          I certify that I am the property owner or an
+                          authorized representative and that the verification
+                          information above is accurate.
+                        </span>
+                      </label>
+                    </div>
+
+                    {newListingError && (
+                      <p className="rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700">
+                        {newListingError}
+                      </p>
+                    )}
+
+                    <div className="flex flex-wrap justify-end gap-2">
+                      <Button
+                        type="button"
+                        variant="outline"
+                        onClick={() => setIsNewListingOpen(false)}
+                      >
+                        Cancel
+                      </Button>
+                      <Button type="submit">Submit for Verification</Button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            )}
+
+            {newListingSuccess && (
+              <div className="fixed inset-0 z-[60] flex items-end justify-center bg-slate-900/45 p-4 sm:items-center">
+                <div className="w-full max-w-lg rounded-2xl border border-emerald-200 bg-white shadow-2xl">
+                  <div className="border-b border-emerald-100 px-5 py-4">
+                    <h3 className="text-lg font-semibold text-slate-900">
+                      Listing Submitted
+                    </h3>
+                  </div>
+                  <div className="px-5 py-4">
+                    <p className="text-sm text-slate-700">
+                      {newListingSuccess}
+                    </p>
+                  </div>
+                  <div className="flex justify-end border-t border-emerald-100 px-5 py-4">
+                    <Button
+                      type="button"
+                      onClick={() => setNewListingSuccess(null)}
+                    >
+                      Close
+                    </Button>
                   </div>
                 </div>
               </div>
