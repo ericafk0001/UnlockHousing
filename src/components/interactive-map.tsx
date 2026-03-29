@@ -16,6 +16,8 @@ type Listing = {
   lat: number;
   lng: number;
   imageUrl: string;
+  nearTransit: boolean;
+  moveInThisMonth: boolean;
 };
 
 interface InteractiveMapProps {

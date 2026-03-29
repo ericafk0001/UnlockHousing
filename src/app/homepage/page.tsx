@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import dynamic from "next/dynamic";
 import { Button } from "@/components/ui/button";
@@ -24,6 +24,8 @@ type Listing = {
   lat: number;
   lng: number;
   imageUrl: string;
+  nearTransit: boolean;
+  moveInThisMonth: boolean;
 };
 
 type NewListingForm = {
@@ -61,115 +63,227 @@ const defaultNewListingForm: NewListingForm = {
 const listings: Listing[] = [
   {
     id: 1,
-    title: "2BR Row Home Near Transit",
-    neighborhood: "North Philadelphia",
-    rent: 890,
-    beds: 2,
-    baths: 1,
-    sqft: 860,
-    supportNote: "Second-chance friendly landlord and flexible deposit plan.",
-    lat: 39.9896,
-    lng: -75.1426,
+    title: "165 Levering St, Philadelphia, PA 19127",
+    neighborhood: "Manayunk",
+    rent: 325000,
+    beds: 4,
+    baths: 2,
+    sqft: 1428,
+    supportNote: "Owner-provided listing with verification documents available.",
+    lat: 40.0269,
+    lng: -75.223,
     imageUrl:
-      "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=400&h=300&fit=crop",
+      "https://photos.zillowstatic.com/fp/b49fdc99816d9e9ad2105d875508a776-cc_ft_768.webp",
+    nearTransit: true,
+    moveInThisMonth: false,
   },
   {
     id: 2,
-    title: "Studio With Reentry Support",
-    neighborhood: "West Philadelphia",
-    rent: 640,
-    beds: 0,
-    baths: 1,
-    sqft: 420,
-    supportNote: "Partnered with local case managers and job services.",
-    lat: 39.9526,
-    lng: -75.2205,
+    title: "6528 N 16th St, Philadelphia, PA 19126",
+    neighborhood: "Oak Lane",
+    rent: 310000,
+    beds: 4,
+    baths: 3,
+    sqft: 1492,
+    supportNote: "Fair-housing compliant screening and flexible showing schedule.",
+    lat: 40.0588,
+    lng: -75.1437,
     imageUrl:
-      "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=400&h=300&fit=crop",
+      "https://photos.zillowstatic.com/fp/dfca9b3a9af7b65e77d5a889f5ca66e5-cc_ft_1536.webp",
+    nearTransit: false,
+    moveInThisMonth: true,
   },
   {
     id: 3,
-    title: "Shared 3BR Family Unit",
-    neighborhood: "Kensington",
-    rent: 780,
-    beds: 3,
+    title: "2438 Tulip St, Philadelphia, PA 19125",
+    neighborhood: "Fishtown",
+    rent: 257000,
+    beds: 2,
     baths: 1,
-    sqft: 980,
-    supportNote: "Co-signer alternatives available through community partners.",
-    lat: 39.9945,
-    lng: -75.1299,
+    sqft: 762,
+    supportNote: "Transit-friendly location and owner open to case-manager references.",
+    lat: 39.9833,
+    lng: -75.1283,
     imageUrl:
-      "https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=400&h=300&fit=crop",
+      "https://photos.zillowstatic.com/fp/08f5797927ddcbac7946d22ba9c9db65-sc_1920_1280.webp",
+    nearTransit: true,
+    moveInThisMonth: true,
   },
   {
     id: 4,
-    title: "1BR Apartment With Utilities Cap",
-    neighborhood: "South Philadelphia",
-    rent: 735,
+    title: "3232 Henry Ave Unit 205, Philadelphia, PA 19129",
+    neighborhood: "East Falls",
+    rent: 1420,
     beds: 1,
     baths: 1,
-    sqft: 590,
-    supportNote: "No blanket background denial policy.",
-    lat: 39.9286,
-    lng: -75.1629,
+    sqft: 665,
+    supportNote: "Apartment community with leasing support for returning citizens.",
+    lat: 40.0126,
+    lng: -75.1921,
     imageUrl:
-      "https://images.unsplash.com/photo-1545324418-cc1a9a6fded0?w=400&h=300&fit=crop",
+      "https://photos.zillowstatic.com/fp/69244acc2ca1554a20fa2be4749b312b-cc_ft_768.webp",
+    nearTransit: true,
+    moveInThisMonth: true,
   },
   {
     id: 5,
-    title: "Transitional Duplex Unit",
-    neighborhood: "Olney",
-    rent: 820,
-    beds: 2,
+    title: "456 N 5th St Unit 30C, Philadelphia, PA 19123",
+    neighborhood: "Northern Liberties",
+    rent: 1550,
+    beds: 0,
     baths: 1,
-    sqft: 760,
-    supportNote: "Application fee waived for referred applicants.",
-    lat: 40.0406,
-    lng: -75.1387,
+    sqft: 425,
+    supportNote: "Studio unit near transit and services with stable lease terms.",
+    lat: 39.9628,
+    lng: -75.1466,
     imageUrl:
-      "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=300&fit=crop",
+      "https://photos.zillowstatic.com/fp/4b60089367b7b398d6a4169af5a5b60b-cc_ft_1536.webp",
+    nearTransit: true,
+    moveInThisMonth: false,
   },
   {
     id: 6,
-    title: "Modern 2BR Loft",
-    neighborhood: "Fishtown",
-    rent: 950,
-    beds: 2,
-    baths: 1.5,
-    sqft: 850,
-    supportNote: "Inclusive community focus, supportive management team.",
-    lat: 39.9659,
-    lng: -75.1372,
+    title: "741 Spring Garden St Unit 516, Philadelphia, PA 19123",
+    neighborhood: "Spring Garden",
+    rent: 1480,
+    beds: 0,
+    baths: 1,
+    sqft: 382,
+    supportNote: "Downtown-adjacent studio with responsive property management.",
+    lat: 39.9618,
+    lng: -75.1501,
     imageUrl:
-      "https://images.unsplash.com/photo-1493857671505-72967e2e2760?w=400&h=300&fit=crop",
+      "https://photos.zillowstatic.com/fp/92082917df7b0199051c20639dddd1c5-cc_ft_1536.webp",
+    nearTransit: true,
+    moveInThisMonth: true,
   },
   {
     id: 7,
-    title: "Studio Near Center City",
-    neighborhood: "University City",
-    rent: 725,
-    beds: 0,
-    baths: 1,
-    sqft: 500,
-    supportNote: "Walking distance to public transit and resources.",
-    lat: 39.9495,
-    lng: -75.1933,
+    title: "1618 N Sydenham St Unit A, Philadelphia, PA 19121",
+    neighborhood: "Brewerytown",
+    rent: 1650,
+    beds: 3,
+    baths: 2,
+    sqft: 1043,
+    supportNote: "Multi-bedroom layout suitable for shared living arrangements.",
+    lat: 39.9803,
+    lng: -75.1619,
     imageUrl:
-      "https://images.unsplash.com/photo-1675675784246-f2147bbed60d?w=400&h=300&fit=crop",
+      "https://photos.zillowstatic.com/fp/c1ce047ad9711845c261cb2db42c50a4-cc_ft_768.webp",
+    nearTransit: true,
+    moveInThisMonth: false,
   },
   {
     id: 8,
-    title: "Spacious 3BR Townhouse",
-    neighborhood: "Northeast Philadelphia",
-    rent: 1100,
+    title: "4021 Ridge Ave Unit 3309, Philadelphia, PA 19129",
+    neighborhood: "East Falls",
+    rent: 1425,
+    beds: 0,
+    baths: 1,
+    sqft: 459,
+    supportNote: "Building includes amenities and close access to SEPTA routes.",
+    lat: 40.0149,
+    lng: -75.196,
+    imageUrl:
+      "https://photos.zillowstatic.com/fp/5b2c08dcc05bbc899acc69fc2d22e084-cc_ft_768.webp",
+    nearTransit: true,
+    moveInThisMonth: true,
+  },
+  {
+    id: 9,
+    title: "4324 Lancaster Ave Unit 204, Philadelphia, PA 19104",
+    neighborhood: "University City",
+    rent: 1325,
+    beds: 1,
+    baths: 1,
+    sqft: 575,
+    supportNote: "Transit-connected one-bedroom with straightforward screening criteria.",
+    lat: 39.9589,
+    lng: -75.2095,
+    imageUrl:
+      "https://photos.zillowstatic.com/fp/b6bec29190580bd5d17108c83e539142-cc_ft_768.webp",
+    nearTransit: true,
+    moveInThisMonth: true,
+  },
+  {
+    id: 10,
+    title: "6300 Carnation St Unit 6338A, Philadelphia, PA 19144",
+    neighborhood: "Germantown",
+    rent: 1195,
+    beds: 1,
+    baths: 1,
+    sqft: 1000,
+    supportNote: "Large one-bedroom option with owner-reviewed applications.",
+    lat: 40.0362,
+    lng: -75.1756,
+    imageUrl:
+      "https://photos.zillowstatic.com/fp/e7b60e9c6ddd0ee95f8b47a617aa7b73-cc_ft_768.webp",
+    nearTransit: false,
+    moveInThisMonth: true,
+  },
+  {
+    id: 11,
+    title: "1207 W Susquehanna Ave Unit 2, Philadelphia, PA 19122",
+    neighborhood: "Temple Area",
+    rent: 1395,
+    beds: 2,
+    baths: 1,
+    sqft: 790,
+    supportNote: "Custom listing with flexible deposit options and co-signer alternatives.",
+    lat: 39.9846,
+    lng: -75.1532,
+    imageUrl:
+      "https://images.unsplash.com/photo-1494526585095-c41746248156?w=800&h=600&fit=crop",
+    nearTransit: true,
+    moveInThisMonth: true,
+  },
+  {
+    id: 12,
+    title: "2218 S 16th St Unit B, Philadelphia, PA 19145",
+    neighborhood: "South Philadelphia West",
+    rent: 1675,
     beds: 3,
     baths: 2,
-    sqft: 1200,
-    supportNote: "Family-friendly building with on-site support services.",
-    lat: 40.0614,
-    lng: -75.0651,
+    sqft: 1105,
+    supportNote: "Custom listing prioritizing stable rental history and reentry support letters.",
+    lat: 39.9217,
+    lng: -75.1743,
     imageUrl:
-      "https://images.unsplash.com/photo-1568605114967-8130f3a36994?w=400&h=300&fit=crop",
+      "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?w=800&h=600&fit=crop",
+    nearTransit: false,
+    moveInThisMonth: false,
+  },
+  {
+    id: 13,
+    title: "912 N 41st St Unit 1F, Philadelphia, PA 19104",
+    neighborhood: "Mantua",
+    rent: 1225,
+    beds: 1,
+    baths: 1,
+    sqft: 610,
+    supportNote: "Custom listing close to bus routes with straightforward application review.",
+    lat: 39.9688,
+    lng: -75.2039,
+    imageUrl:
+      "https://images.unsplash.com/photo-1484154218962-a197022b5858?w=800&h=600&fit=crop",
+    nearTransit: true,
+    moveInThisMonth: true,
+  },
+  {
+    id: 14,
+    title: "5809 Germantown Ave Unit 3R, Philadelphia, PA 19144",
+    neighborhood: "Germantown",
+    rent: 1085,
+    beds: 1,
+    baths: 1,
+    sqft: 720,
+    supportNote: "Custom listing with owner-managed approvals and utility cap support.",
+    lat: 40.0356,
+    lng: -75.1706,
+    imageUrl:
+      "https://images.unsplash.com/photo-1512918728675-ed5a9ecdebfd?w=800&h=600&fit=crop",
+    nearTransit: true,
+    moveInThisMonth: false,
   },
 ];
 
@@ -267,6 +381,56 @@ export default function Homepage() {
   const [newListingSuccess, setNewListingSuccess] = useState<string | null>(
     null,
   );
+
+  const filteredListings = useMemo(() => {
+    const query = searchQuery.trim().toLowerCase();
+
+    let result = listings.filter((listing) => {
+      if (!query) {
+        return true;
+      }
+
+      const haystack = [
+        listing.title,
+        listing.neighborhood,
+        String(listing.rent),
+        listing.beds === 0 ? "studio" : `${listing.beds} bed`,
+      ]
+        .join(" ")
+        .toLowerCase();
+
+      return haystack.includes(query);
+    });
+
+    if (activeFilter === "Lowest Rent") {
+      result = [...result].sort((a, b) => a.rent - b.rent);
+    }
+
+    if (activeFilter === "Near Transit") {
+      result = [...result].sort((a, b) => {
+        if (a.nearTransit === b.nearTransit) {
+          return a.rent - b.rent;
+        }
+        return a.nearTransit ? -1 : 1;
+      });
+    }
+
+    if (activeFilter === "Move-in This Month") {
+      result = result.filter((listing) => listing.moveInThisMonth);
+      result = [...result].sort((a, b) => a.rent - b.rent);
+    }
+
+    return result;
+  }, [activeFilter, searchQuery]);
+
+  useEffect(() => {
+    if (
+      selectedListing &&
+      !filteredListings.some((listing) => listing.id === selectedListing.id)
+    ) {
+      setSelectedListing(null);
+    }
+  }, [filteredListings, selectedListing]);
 
   useEffect(() => {
     setSupabase(createSupabaseBrowserClient());
@@ -559,7 +723,7 @@ export default function Homepage() {
               }}
             >
               <MapComponent
-                listings={listings}
+                listings={filteredListings}
                 onPinClick={setSelectedListing}
               />
 
@@ -571,7 +735,7 @@ export default function Homepage() {
                   willChange: "scroll-position",
                 }}
               >
-                {listings.map((listing) => (
+                {filteredListings.map((listing) => (
                   <article
                     key={listing.id}
                     className="cursor-pointer rounded-xl border border-sky-100 bg-gradient-to-br from-white to-emerald-50/40 p-3 shadow-sm transition hover:border-emerald-300 hover:shadow-md"
@@ -624,6 +788,12 @@ export default function Homepage() {
                     </div>
                   </article>
                 ))}
+
+                {filteredListings.length === 0 ? (
+                  <div className="rounded-xl border border-dashed border-sky-200 bg-white/90 p-4 text-sm text-slate-600">
+                    No listings match your current search and filter.
+                  </div>
+                ) : null}
               </aside>
             </div>
 
