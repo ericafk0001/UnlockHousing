@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import { SiteNavbar } from "@/components/site-navbar";
+import { ConditionalNavbar } from "@/components/conditional-navbar";
 import { ScrollEffects } from "@/components/scroll-effects";
 import "./globals.css";
 
@@ -53,7 +53,7 @@ export default function RootLayout({
           </div>
 
           <div className="relative z-10 flex min-h-full flex-col">
-            <SiteNavbar />
+            <ConditionalNavbar />
             {children}
           </div>
         </ScrollEffects>
