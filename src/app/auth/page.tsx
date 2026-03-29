@@ -61,7 +61,7 @@ export default function AuthPage() {
   return (
     <main className="flex flex-1 items-center justify-center px-6 py-12">
       <section className="w-full max-w-md rounded-2xl border border-border bg-card p-6 shadow-xl backdrop-blur">
-        <h2 className="text-2xl font-semibold">Supabase Authentication</h2>
+        <h2 className="text-2xl font-semibold">UnlockHousing Authentication</h2>
         <p className="mt-2 text-sm text-muted-foreground">
           {initialMode === "signin"
             ? "Welcome back. Sign in with your email and password."

@@ -144,31 +144,23 @@ export default function Home() {
       </div>
 
       <div className="w-full" aria-hidden="true"></div>
-      <footer className="sticky bottom-0 z-0 h-170 border-t border-black/10 bg-[#1a1d23] text-white">
+      <footer className="sticky bottom-0 z-0 h-160 border-t border-black/10 bg-[#1a1d23] text-white">
         {" "}
         <div className="pointer-events-auto mx-auto flex h-full w-full max-w-7xl flex-col justify-between px-6 py-8 sm:px-8 sm:py-10 lg:px-10">
           <div>
-            <p className="text-xs uppercase tracking-[0.2em] text-white/65">
-              Contact
-            </p>
-            <p className="mt-3 max-w-[26ch] text-[clamp(1.9rem,4vw,3.4rem)] font-semibold leading-[1.02] tracking-tight text-white">
-              Ready to Open More Doors?
-            </p>
-            <p className="mt-4 max-w-[60ch] text-[clamp(1rem,1.35vw,1.2rem)] leading-relaxed text-white/75">
-              Let&apos;s build a fair-chance housing network that helps
-              returning citizens and landlords move forward with confidence.
-            </p>
-          </div>
-
-          <div className="flex flex-wrap items-center gap-4 text-sm text-white/80 sm:text-base">
-            <a
-              href="mailto:team@unlockhousing.org"
-              className="inline-flex items-center rounded-full border border-white/25 px-4 py-2 transition-colors hover:bg-white/10"
-            >
-              team@unlockhousing.org
-            </a>
-            <span className="text-white/40">|</span>
-            <span>Philadelphia, PA</span>
+            <div className="group mt-3 flex w-full max-w-full flex-wrap items-center gap-4 perspective-[700px] sm:flex-nowrap sm:gap-6">
+              <a
+                href="mailto:team@unlockhousing.org"
+                className="max-w-[11ch] min-w-0 text-[clamp(2.8rem,11vw,8.2rem)] font-semibold leading-[0.92] tracking-tight text-white transition-opacity hover:opacity-80"
+              >
+                Contact Us
+              </a>
+              <span className="inline-flex h-[clamp(4rem,10vw,7.5rem)] w-[clamp(4rem,10vw,7.5rem)] shrink-0 items-center justify-center rounded-full bg-blue-500 text-[clamp(2.1rem,5vw,4rem)] leading-none text-white transition-transform duration-300 group-hover:transform-[rotateY(45deg)_rotateX(25deg)]">
+                <span className="inline-block transition-transform duration-300 transform-[rotate(-140deg)] group-hover:transform-[rotate(-140deg)_rotateY(45deg)_rotateX(25deg)]">
+                  ↓
+                </span>
+              </span>
+            </div>
           </div>
         </div>
         <div className="absolute bottom-0 left-0 right-0 border-t border-black/10 bg-[#f4f4f4] px-6 py-7 text-[#1b1b1b] sm:px-8 lg:px-10">
