@@ -1,15 +1,16 @@
 "use client";
 
-import { FormEvent, useMemo, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { Google } from "@deemlol/next-icons";
 import { FaApple } from "react-icons/fa6";
 import { Button } from "@/components/ui/button";
 import { createSupabaseBrowserClient } from "@/lib/supabase";
+import type { SupabaseClient } from "@supabase/supabase-js";
 
 export function AuthForm() {
-  const supabase = useMemo(() => createSupabaseBrowserClient(), []);
+  const [supabase, setSupabase] = useState<SupabaseClient | null>(null);
   const searchParams = useSearchParams();
   const initialMode =
     searchParams.get("mode") === "signin" ? "signin" : "signup";
@@ -26,12 +27,21 @@ export function AuthForm() {
   >(null);
   const [message, setMessage] = useState("");
 
+  useEffect(() => {
+    setSupabase(createSupabaseBrowserClient());
+  }, []);
+
   const hasCredentials = email.trim() !== "" && password.trim() !== "";
   const hasSignUpDetails =
     firstName.trim() !== "" && lastName.trim() !== "" && phone.trim() !== "";
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+
+    if (!supabase) {
+      setMessage("Initialization error. Please refresh the page.");
+      return;
+    }
 
     if (!hasCredentials) {
       setMessage(
@@ -80,6 +90,11 @@ export function AuthForm() {
   };
 
   const handleOAuthSignIn = async (provider: "google" | "apple") => {
+    if (!supabase) {
+      setMessage("Initialization error. Please refresh the page.");
+      return;
+    }
+
     setOauthProviderLoading(provider);
     setMessage("");
 
