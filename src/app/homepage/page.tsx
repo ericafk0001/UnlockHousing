@@ -257,6 +257,8 @@ export default function Homepage() {
   const [requestSuccessMessage, setRequestSuccessMessage] = useState<
     string | null
   >(null);
+  const [profileRequiredModalOpen, setProfileRequiredModalOpen] =
+    useState(false);
   const [isNewListingOpen, setIsNewListingOpen] = useState(false);
   const [newListingForm, setNewListingForm] = useState<NewListingForm>(
     defaultNewListingForm,
@@ -344,6 +346,15 @@ export default function Homepage() {
 
   const confirmIntroductionRequest = () => {
     if (!pendingIntroduction) {
+      return;
+    }
+
+    const questionnaireComplete =
+      window.localStorage.getItem("uh_tenant_questionnaire_complete") ===
+      "true";
+    if (!questionnaireComplete) {
+      setPendingIntroduction(null);
+      setProfileRequiredModalOpen(true);
       return;
     }
 
@@ -774,6 +785,42 @@ export default function Homepage() {
                       onClick={() => setRequestSuccessMessage(null)}
                     >
                       Close
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {profileRequiredModalOpen && (
+              <div className="fixed inset-0 z-[60] flex items-end justify-center bg-slate-900/45 p-4 sm:items-center">
+                <div className="w-full max-w-lg rounded-2xl border border-amber-200 bg-white shadow-2xl">
+                  <div className="border-b border-amber-100 px-5 py-4">
+                    <h3 className="text-lg font-semibold text-slate-900">
+                      Complete Profile Required
+                    </h3>
+                  </div>
+                  <div className="px-5 py-4">
+                    <p className="text-sm text-slate-700">
+                      Before applying for housing, please complete the tenant
+                      questionnaire on your profile page.
+                    </p>
+                  </div>
+                  <div className="flex justify-end gap-2 border-t border-amber-100 px-5 py-4">
+                    <Button
+                      type="button"
+                      variant="outline"
+                      onClick={() => setProfileRequiredModalOpen(false)}
+                    >
+                      Close
+                    </Button>
+                    <Button
+                      type="button"
+                      onClick={() => {
+                        setProfileRequiredModalOpen(false);
+                        router.push("/profile");
+                      }}
+                    >
+                      Go to Profile
                     </Button>
                   </div>
                 </div>

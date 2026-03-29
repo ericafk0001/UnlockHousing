@@ -1,5 +1,6 @@
 import { HeroOrbs } from "@/components/hero-orbs";
 import { InsightsCharts } from "@/components/insights-charts";
+import { CookieConsentBox } from "@/components/cookie-consent-box";
 
 export default function Home() {
   return (
@@ -70,11 +71,10 @@ export default function Home() {
                 Unlock Housing creates a faster, fairer path into stable homes.
               </p>
               <p className="mt-7 max-w-[46ch] text-[clamp(1.18rem,1.9vw,1.95rem)] leading-[1.35] text-[#394046] text-pretty">
-                UnlockHousing is a Zillow-style rental marketplace that connects
-                homeowners and returning citizens through a trusted
-                intermediary, streamlines applications, and gives applicants
-                room to share their story to reduce stigma and build confidence
-                on both sides.
+                UnlockHousing is a rental marketplace that connects homeowners
+                and returning citizens through a trusted intermediary,
+                streamlines applications, and gives applicants room to share
+                their story to reduce stigma and build confidence on both sides.
               </p>
             </article>
           </div>
@@ -187,6 +187,8 @@ export default function Home() {
           </div>
         </div>
       </footer>
+
+      <CookieConsentBox />
     </>
   );
 }

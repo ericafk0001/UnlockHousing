@@ -318,6 +318,20 @@ export default function ResumePage() {
             <p className="mt-2 text-lg text-gray-600">
               Build your resume with a step-by-step form and live preview
             </p>
+
+            <div className="mx-auto mt-6 max-w-4xl rounded-xl border border-amber-200 bg-amber-50 px-5 py-4 text-left">
+              <p className="text-sm text-amber-900">
+                This resume builder was developed with the assistance of Alibaba
+                Cloud&apos;s Qwen 3 to assist in generating resume content based on
+                the information that you provided. The AI-generated suggestions
+                are for drafting purposes only, and should not be considered
+                professional advice. While we strive for accuracy, we cannot
+                guarantee that the generated content will be error-free nor will
+                the generated content be tailored to specific job postings.
+                Please ensure that you review and verify all information prior
+                to using it in any professional context.
+              </p>
+            </div>
           </div>
 
           <div className="rounded-xl border border-gray-200 bg-white shadow-lg p-8">
