@@ -44,7 +44,7 @@ export default function Home() {
         <section
           id="about"
           data-scroll-section
-          className="h-svh border-t border-black bg-white p-4 sm:p-6 lg:p-10"
+          className="min-h-svh border-t border-black bg-white p-4 sm:p-6 lg:h-svh lg:p-10"
         >
           <div className="mx-auto grid h-full w-full max-w-7xl gap-4 lg:grid-cols-2">
             <article
@@ -141,40 +141,49 @@ export default function Home() {
         </section>
 
         <InsightsCharts />
-
-        <section
-          id="contact"
-          data-scroll-section
-          className="relative z-10 h-96 bg-transparent"
-        >
-          <span className="sr-only">Contact</span>
-        </section>
       </div>
 
-      <footer className="pointer-events-none fixed inset-x-0 bottom-0 z-0 h-96 border-t border-black/10 bg-[#1a1d23] text-white">
-        <div className="pointer-events-auto mx-auto flex h-full w-full max-w-7xl flex-col justify-between px-6 py-8 sm:px-8 sm:py-10 lg:px-10">
+      <div className="hidden w-full lg:block lg:h-160" aria-hidden="true" />
+      <footer className="relative z-0 border-t border-black/10 bg-[#1a1d23] text-white lg:sticky lg:bottom-0 lg:h-160">
+        <div className="pointer-events-auto mx-auto flex w-full max-w-7xl flex-col gap-12 px-5 py-8 sm:px-8 sm:py-10 lg:h-full lg:justify-between lg:gap-0 lg:px-10 lg:py-10">
           <div>
-            <p className="text-xs uppercase tracking-[0.2em] text-white/65">
-              Contact
-            </p>
-            <p className="mt-3 max-w-[26ch] text-[clamp(1.9rem,4vw,3.4rem)] font-semibold leading-[1.02] tracking-tight text-white">
-              Ready to Open More Doors?
-            </p>
-            <p className="mt-4 max-w-[60ch] text-[clamp(1rem,1.35vw,1.2rem)] leading-relaxed text-white/75">
-              Let&apos;s build a fair-chance housing network that helps
-              returning citizens and landlords move forward with confidence.
-            </p>
+            <div className="group mt-3 flex w-full max-w-full flex-wrap items-center gap-4 perspective-[700px] sm:flex-nowrap sm:gap-6">
+              <a
+                href="/contact"
+                className="max-w-[11ch] min-w-0 text-[clamp(1.9rem,10vw,8.2rem)] font-semibold leading-[0.92] tracking-tight text-white transition-opacity hover:opacity-80"
+              >
+                Contact Us
+              </a>
+              <span className="inline-flex h-[clamp(4rem,10vw,7.5rem)] w-[clamp(4rem,10vw,7.5rem)] shrink-0 items-center justify-center rounded-full bg-blue-500 text-[clamp(2.1rem,5vw,4rem)] leading-none text-white transition-transform duration-300 group-hover:transform-[rotateY(45deg)_rotateX(25deg)]">
+                <span className="inline-block transition-transform duration-300 transform-[rotate(-140deg)] group-hover:transform-[rotate(-140deg)_rotateY(45deg)_rotateX(25deg)]">
+                  ↓
+                </span>
+              </span>
+            </div>
           </div>
-
-          <div className="flex flex-wrap items-center gap-4 text-sm text-white/80 sm:text-base">
-            <a
-              href="mailto:team@unlockhousing.org"
-              className="inline-flex items-center rounded-full border border-white/25 px-4 py-2 transition-colors hover:bg-white/10"
-            >
-              team@unlockhousing.org
-            </a>
-            <span className="text-white/40">|</span>
-            <span>Philadelphia, PA</span>
+        </div>
+        <div className="border-t border-black/10 bg-[#f4f4f4] px-5 py-5 text-[#1b1b1b] sm:px-8 sm:py-6 lg:absolute lg:bottom-0 lg:left-0 lg:right-0 lg:px-10 lg:py-7">
+          <div className="mx-auto flex w-full max-w-7xl flex-col gap-3 text-[clamp(0.95rem,1.45vw,2rem)] sm:flex-row sm:items-center sm:justify-between sm:gap-4">
+            <p className="font-medium">
+              ©2026 Unlock Housing All Rights Reserved.
+            </p>
+            <div className="flex flex-wrap items-center gap-x-5 gap-y-2 sm:gap-x-10 sm:gap-y-3">
+              <a
+                href="/privacy"
+                className="transition-opacity hover:opacity-70"
+              >
+                Privacy Policy
+              </a>
+              <a href="/terms" className="transition-opacity hover:opacity-70">
+                Terms of Service
+              </a>
+              <a
+                href="/accessibility"
+                className="transition-opacity hover:opacity-70"
+              >
+                Accessibility
+              </a>
+            </div>
           </div>
         </div>
       </footer>

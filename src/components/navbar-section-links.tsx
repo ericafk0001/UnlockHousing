@@ -5,7 +5,7 @@ import { usePathname, useRouter } from "next/navigation";
 
 const pendingSectionKey = "unlockhousing:pending-section";
 
-const sectionIds = ["about", "insights", "contact"] as const;
+const sectionIds = ["about", "insights"] as const;
 
 const scrollToSection = (id: string) => {
   const section = document.getElementById(id);
@@ -71,7 +71,7 @@ export function NavbarSectionLinks() {
       </button>
       <button
         type="button"
-        onClick={() => handleSectionClick("contact")}
+        onClick={() => router.push("/contact")}
         className="inline-flex items-center justify-center px-2 text-sm font-medium text-foreground md:text-base"
       >
         Contact
