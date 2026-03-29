@@ -299,7 +299,7 @@ export function AuthForm() {
                 required
               />
               <span className="text-xs leading-5 text-muted-foreground">
-                I agree to the{" "}
+                I agree and have read the{" "}
                 <Link
                   href="/terms"
                   className="font-medium text-foreground underline underline-offset-2 hover:text-primary"

@@ -648,7 +648,10 @@ export default function ProfilePage() {
                         type="text"
                         value={tenantQuestionnaire.school}
                         onChange={(event) =>
-                          updateTenantQuestionnaire("school", event.target.value)
+                          updateTenantQuestionnaire(
+                            "school",
+                            event.target.value,
+                          )
                         }
                         className="h-11 w-full rounded-md border border-input bg-background px-3 text-sm text-foreground outline-none transition focus:border-ring"
                         required
@@ -720,7 +723,8 @@ export default function ProfilePage() {
                       onChange={(event) =>
                         updateTenantQuestionnaire(
                           "employmentStatus",
-                          event.target.value as TenantQuestionnaire["employmentStatus"],
+                          event.target
+                            .value as TenantQuestionnaire["employmentStatus"],
                         )
                       }
                       className="h-11 w-full rounded-md border border-input bg-background px-3 text-sm text-foreground outline-none transition focus:border-ring"
@@ -869,7 +873,9 @@ export default function ProfilePage() {
                         </label>
                         <select
                           id="employedPermissionToContactSupervisor"
-                          value={tenantQuestionnaire.employedPermissionToContactSupervisor}
+                          value={
+                            tenantQuestionnaire.employedPermissionToContactSupervisor
+                          }
                           onChange={(event) =>
                             updateTenantQuestionnaire(
                               "employedPermissionToContactSupervisor",
@@ -941,7 +947,9 @@ export default function ProfilePage() {
                         <input
                           id="unemployedSupervisorContact"
                           type="text"
-                          value={tenantQuestionnaire.unemployedSupervisorContact}
+                          value={
+                            tenantQuestionnaire.unemployedSupervisorContact
+                          }
                           onChange={(event) =>
                             updateTenantQuestionnaire(
                               "unemployedSupervisorContact",
@@ -961,7 +969,9 @@ export default function ProfilePage() {
                         </label>
                         <select
                           id="unemployedPermissionToContactSupervisor"
-                          value={tenantQuestionnaire.unemployedPermissionToContactSupervisor}
+                          value={
+                            tenantQuestionnaire.unemployedPermissionToContactSupervisor
+                          }
                           onChange={(event) =>
                             updateTenantQuestionnaire(
                               "unemployedPermissionToContactSupervisor",
@@ -1080,7 +1090,10 @@ export default function ProfilePage() {
                       id="lengthOfStays"
                       value={tenantQuestionnaire.lengthOfStays}
                       onChange={(event) =>
-                        updateTenantQuestionnaire("lengthOfStays", event.target.value)
+                        updateTenantQuestionnaire(
+                          "lengthOfStays",
+                          event.target.value,
+                        )
                       }
                       className="min-h-20 w-full rounded-md border border-input bg-background px-3 py-2 text-sm text-foreground outline-none transition focus:border-ring"
                       required
@@ -1135,7 +1148,9 @@ export default function ProfilePage() {
                     </label>
                     <select
                       id="permissionToContactPreviousLandlords"
-                      value={tenantQuestionnaire.permissionToContactPreviousLandlords}
+                      value={
+                        tenantQuestionnaire.permissionToContactPreviousLandlords
+                      }
                       onChange={(event) =>
                         updateTenantQuestionnaire(
                           "permissionToContactPreviousLandlords",
@@ -1166,7 +1181,10 @@ export default function ProfilePage() {
                     id="references"
                     value={tenantQuestionnaire.references}
                     onChange={(event) =>
-                      updateTenantQuestionnaire("references", event.target.value)
+                      updateTenantQuestionnaire(
+                        "references",
+                        event.target.value,
+                      )
                     }
                     className="min-h-24 w-full rounded-md border border-input bg-background px-3 py-2 text-sm text-foreground outline-none transition focus:border-ring"
                     required
@@ -1191,7 +1209,9 @@ export default function ProfilePage() {
                     </label>
                     <select
                       id="misdemeanorConvictionPast5Years"
-                      value={tenantQuestionnaire.misdemeanorConvictionPast5Years}
+                      value={
+                        tenantQuestionnaire.misdemeanorConvictionPast5Years
+                      }
                       onChange={(event) =>
                         updateTenantQuestionnaire(
                           "misdemeanorConvictionPast5Years",
