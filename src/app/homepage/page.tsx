@@ -20,6 +20,29 @@ const getFileExtension = (filename: string) => {
   return parts[parts.length - 1].toLowerCase();
 };
 
+const resolveAvatarDisplayUrl = async (
+  supabase: ReturnType<typeof createSupabaseBrowserClient>,
+  avatarValue: string,
+) => {
+  if (avatarValue.startsWith("http://") || avatarValue.startsWith("https://")) {
+    return avatarValue;
+  }
+
+  const { data: signedData, error: signedError } = await supabase.storage
+    .from("avatars")
+    .createSignedUrl(avatarValue, 60 * 60 * 24 * 365);
+
+  if (!signedError && signedData?.signedUrl) {
+    return signedData.signedUrl;
+  }
+
+  const { data: publicData } = supabase.storage
+    .from("avatars")
+    .getPublicUrl(avatarValue);
+
+  return publicData.publicUrl;
+};
+
 export default function Homepage() {
   const router = useRouter();
   const [supabase, setSupabase] = useState<ReturnType<
@@ -31,6 +54,7 @@ export default function Homepage() {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [phone, setPhone] = useState("");
+  const [avatarPath, setAvatarPath] = useState<string | null>(null);
   const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
@@ -84,6 +108,11 @@ export default function Homepage() {
         setFirstName(String(metadata.first_name ?? ""));
         setLastName(String(metadata.last_name ?? ""));
         setPhone(String(metadata.phone ?? ""));
+        const metadataAvatar = String(metadata.avatar_url ?? "").trim();
+        if (metadataAvatar) {
+          setAvatarPath(metadataAvatar);
+          setAvatarUrl(await resolveAvatarDisplayUrl(supabase, metadataAvatar));
+        }
         setIsLoading(false);
         return;
       }
@@ -91,7 +120,16 @@ export default function Homepage() {
       setFirstName(data?.first_name ?? String(metadata.first_name ?? ""));
       setLastName(data?.last_name ?? String(metadata.last_name ?? ""));
       setPhone(data?.phone ?? String(metadata.phone ?? ""));
-      setAvatarUrl(data?.avatar_url ?? null);
+      const metadataAvatar = String(metadata.avatar_url ?? "").trim();
+      const storedAvatar = data?.avatar_url ?? (metadataAvatar || null);
+
+      if (storedAvatar) {
+        setAvatarPath(storedAvatar);
+        setAvatarUrl(await resolveAvatarDisplayUrl(supabase, storedAvatar));
+      } else {
+        setAvatarPath(null);
+        setAvatarUrl(null);
+      }
       setIsLoading(false);
     };
 
@@ -124,17 +162,26 @@ export default function Homepage() {
         first_name: firstName.trim(),
         last_name: lastName.trim(),
         phone: phone.trim(),
-        avatar_url: avatarUrl,
+        avatar_url: avatarPath,
         updated_at: new Date().toISOString(),
       },
       { onConflict: "id" },
     );
 
+    const { error: metadataError } = await supabase.auth.updateUser({
+      data: {
+        first_name: firstName.trim(),
+        last_name: lastName.trim(),
+        phone: phone.trim(),
+        avatar_url: avatarPath,
+      },
+    });
+
     setIsSaving(false);
 
-    if (error) {
+    if (error || metadataError) {
       setStatusMessage(
-        "Could not save profile. Check profiles table and RLS policies in Supabase.",
+        `Could not fully save profile. ${error?.message ?? metadataError?.message ?? "Check profiles table and RLS policies in Supabase."}`,
       );
       return;
     }
@@ -170,16 +217,45 @@ export default function Homepage() {
 
     if (uploadError) {
       setIsUploading(false);
+      setStatusMessage(`Could not upload image. ${uploadError.message}`);
+      return;
+    }
+
+    const displayUrl = await resolveAvatarDisplayUrl(supabase, filePath);
+    setAvatarPath(filePath);
+    setAvatarUrl(displayUrl);
+
+    const { error: profileError } = await supabase.from("profiles").upsert(
+      {
+        id: userId,
+        first_name: firstName.trim(),
+        last_name: lastName.trim(),
+        phone: phone.trim(),
+        avatar_url: filePath,
+        updated_at: new Date().toISOString(),
+      },
+      { onConflict: "id" },
+    );
+
+    const { error: metadataError } = await supabase.auth.updateUser({
+      data: {
+        first_name: firstName.trim(),
+        last_name: lastName.trim(),
+        phone: phone.trim(),
+        avatar_url: filePath,
+      },
+    });
+
+    setIsUploading(false);
+
+    if (profileError || metadataError) {
       setStatusMessage(
-        "Could not upload image. Ensure the avatars bucket and policies are configured.",
+        `Avatar uploaded, but profile sync failed. ${profileError?.message ?? metadataError?.message ?? "Please check Supabase policies."}`,
       );
       return;
     }
 
-    const { data } = supabase.storage.from("avatars").getPublicUrl(filePath);
-    setAvatarUrl(data.publicUrl);
-    setIsUploading(false);
-    setStatusMessage("Avatar uploaded. Click Save Profile to persist it.");
+    setStatusMessage("Avatar uploaded and saved.");
   };
 
   const handleSignOut = async () => {
