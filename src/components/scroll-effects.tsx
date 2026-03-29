@@ -75,12 +75,19 @@ const refreshLocomotive = (instance: LocomotiveInstance | undefined) => {
 
 export function ScrollEffects({ children }: { children: ReactNode }) {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
-  const locomotiveRef = useRef<LocomotiveInstance>();
+  const locomotiveRef = useRef<LocomotiveInstance | undefined>(undefined);
   const pathname = usePathname();
+  const isAccessibilityRoute = pathname === "/accessibility";
   const [isReady, setIsReady] = useState(false);
   const [progress, setProgress] = useState(0);
 
   useEffect(() => {
+    if (isAccessibilityRoute) {
+      setProgress(100);
+      setIsReady(true);
+      return;
+    }
+
     let cancelled = false;
 
     const preloadAssets = async () => {
@@ -116,15 +123,20 @@ export function ScrollEffects({ children }: { children: ReactNode }) {
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [isAccessibilityRoute]);
 
   useEffect(() => {
-    if (!isReady) {
+    if (!isReady || isAccessibilityRoute) {
       return;
     }
 
     const navbar = document.querySelector<HTMLElement>("[data-navbar]");
     if (!navbar) {
+      return;
+    }
+
+    if (isAccessibilityRoute) {
+      gsap.set(navbar, { autoAlpha: 1, y: 0 });
       return;
     }
 
@@ -135,7 +147,7 @@ export function ScrollEffects({ children }: { children: ReactNode }) {
       delay: 1.5,
       ease: "power3.out",
     });
-  }, [isReady, pathname]);
+  }, [isReady, pathname, isAccessibilityRoute]);
 
   useEffect(() => {
     if (!isReady) {
@@ -156,14 +168,14 @@ export function ScrollEffects({ children }: { children: ReactNode }) {
       }
 
       const LocomotiveScroll = locomotiveModule.default;
-      locomotiveRef.current?.destroy();
+      locomotiveRef.current?.destroy?.();
       locomotiveRef.current = new LocomotiveScroll({
         el: container,
         smooth: true,
         lerp: 0.08,
         smartphone: { smooth: true },
         tablet: { smooth: true },
-      });
+      } as any);
 
       window.setTimeout(() => {
         refreshLocomotive(locomotiveRef.current);
@@ -181,10 +193,10 @@ export function ScrollEffects({ children }: { children: ReactNode }) {
       locomotiveRef.current?.destroy?.();
       locomotiveRef.current = undefined;
     };
-  }, [isReady, pathname]);
+  }, [isReady, pathname, isAccessibilityRoute]);
 
   useLayoutEffect(() => {
-    if (!isReady) {
+    if (!isReady || isAccessibilityRoute) {
       return;
     }
 
@@ -236,29 +248,33 @@ export function ScrollEffects({ children }: { children: ReactNode }) {
     return () => {
       observer.disconnect();
     };
-  }, [isReady, pathname]);
+  }, [isReady, pathname, isAccessibilityRoute]);
 
   return (
     <>
-      <div
-        aria-hidden={isReady}
-        className={`fixed inset-0 z-80 flex items-center justify-center bg-white transition-opacity duration-500 ${
-          isReady ? "pointer-events-none opacity-0" : "opacity-100"
-        }`}
-      >
-        <div className="w-[min(24rem,84vw)]">
-          <p className="text-center text-sm font-medium uppercase tracking-[0.2em] text-[#1f2830]">
-            UnlockHousing
-          </p>
-          <div className="mt-5 h-2 w-full overflow-hidden rounded-full bg-[#e6e8eb]">
-            <div
-              className="h-full rounded-full bg-[#1f2830] transition-[width] duration-300"
-              style={{ width: `${progress}%` }}
-            />
+      {!isAccessibilityRoute && (
+        <div
+          aria-hidden={isReady}
+          className={`fixed inset-0 z-80 flex items-center justify-center bg-white transition-opacity duration-500 ${
+            isReady ? "pointer-events-none opacity-0" : "opacity-100"
+          }`}
+        >
+          <div className="w-[min(24rem,84vw)]">
+            <p className="text-center text-sm font-medium uppercase tracking-[0.2em] text-[#1f2830]">
+              LOADING
+            </p>
+            <div className="mt-5 h-2 w-full overflow-hidden rounded-full bg-[#e6e8eb]">
+              <div
+                className="h-full rounded-full bg-[#1f2830] transition-[width] duration-300"
+                style={{ width: `${progress}%` }}
+              />
+            </div>
+            <p className="mt-3 text-center text-xs text-[#57616b]">
+              {progress}%
+            </p>
           </div>
-          <p className="mt-3 text-center text-xs text-[#57616b]">{progress}%</p>
         </div>
-      </div>
+      )}
 
       <div ref={scrollContainerRef} data-scroll-container>
         {children}
