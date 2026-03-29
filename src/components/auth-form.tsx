@@ -2,14 +2,31 @@
 
 import { FormEvent, useEffect, useState } from "react";
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { Google } from "@deemlol/next-icons";
 import { FaApple } from "react-icons/fa6";
 import { Button } from "@/components/ui/button";
 import { createSupabaseBrowserClient } from "@/lib/supabase";
 import type { SupabaseClient } from "@supabase/supabase-js";
 
+const getHomepageRedirectUrl = () => {
+  if (typeof window !== "undefined") {
+    return new URL("/homepage", window.location.origin).toString();
+  }
+
+  const configuredSiteUrl = process.env.NEXT_PUBLIC_SITE_URL?.replace(
+    /\/$/,
+    "",
+  );
+  if (configuredSiteUrl) {
+    return `${configuredSiteUrl}/homepage`;
+  }
+
+  return "/homepage";
+};
+
 export function AuthForm() {
+  const router = useRouter();
   const [supabase, setSupabase] = useState<SupabaseClient | null>(null);
   const searchParams = useSearchParams();
   const initialMode =
@@ -72,7 +89,7 @@ export function AuthForm() {
           email,
           password,
           options: {
-            emailRedirectTo: `${window.location.origin}/auth`,
+            emailRedirectTo: getHomepageRedirectUrl(),
             data: {
               first_name: firstName.trim(),
               last_name: lastName.trim(),
@@ -88,11 +105,7 @@ export function AuthForm() {
       return;
     }
 
-    setMessage(
-      isSignInMode
-        ? "Signed in successfully."
-        : "Sign up successful. If email confirmation is enabled, check your inbox before signing in.",
-    );
+    router.push("/homepage");
   };
 
   const handleOAuthSignIn = async (provider: "google" | "apple") => {
@@ -107,7 +120,7 @@ export function AuthForm() {
     const { error } = await supabase.auth.signInWithOAuth({
       provider,
       options: {
-        redirectTo: `${window.location.origin}/auth`,
+        redirectTo: getHomepageRedirectUrl(),
       },
     });
 
