@@ -44,7 +44,7 @@ export default function Home() {
         <section
           id="about"
           data-scroll-section
-          className="h-svh border-t border-black bg-white p-4 sm:p-6 lg:p-10"
+          className="min-h-svh border-t border-black bg-white p-4 sm:p-6 lg:h-svh lg:p-10"
         >
           <div className="mx-auto grid h-full w-full max-w-7xl gap-4 lg:grid-cols-2">
             <article
@@ -144,14 +144,13 @@ export default function Home() {
       </div>
 
       <div className="w-full" aria-hidden="true"></div>
-      <footer className="sticky bottom-0 z-0 h-160 border-t border-black/10 bg-[#1a1d23] text-white">
-        {" "}
-        <div className="pointer-events-auto mx-auto flex h-full w-full max-w-7xl flex-col justify-between px-6 py-8 sm:px-8 sm:py-10 lg:px-10">
+      <footer className="relative z-0 border-t border-black/10 bg-[#1a1d23] text-white lg:sticky lg:bottom-0 lg:h-160">
+        <div className="pointer-events-auto mx-auto flex w-full max-w-7xl flex-col gap-12 px-5 py-8 sm:px-8 sm:py-10 lg:h-full lg:justify-between lg:gap-0 lg:px-10 lg:py-10">
           <div>
             <div className="group mt-3 flex w-full max-w-full flex-wrap items-center gap-4 perspective-[700px] sm:flex-nowrap sm:gap-6">
               <a
                 href="mailto:ninachenners@gmail.com"
-                className="max-w-[11ch] min-w-0 text-[clamp(2.8rem,11vw,8.2rem)] font-semibold leading-[0.92] tracking-tight text-white transition-opacity hover:opacity-80"
+                className="max-w-[11ch] min-w-0 text-[clamp(1.9rem,10vw,8.2rem)] font-semibold leading-[0.92] tracking-tight text-white transition-opacity hover:opacity-80"
               >
                 Contact Us
               </a>
@@ -163,12 +162,12 @@ export default function Home() {
             </div>
           </div>
         </div>
-        <div className="absolute bottom-0 left-0 right-0 border-t border-black/10 bg-[#f4f4f4] px-6 py-7 text-[#1b1b1b] sm:px-8 lg:px-10">
-          <div className="mx-auto flex w-full max-w-7xl flex-col gap-4 text-[clamp(1.1rem,1.6vw,2rem)] sm:flex-row sm:items-center sm:justify-between">
+        <div className="border-t border-black/10 bg-[#f4f4f4] px-5 py-5 text-[#1b1b1b] sm:px-8 sm:py-6 lg:absolute lg:bottom-0 lg:left-0 lg:right-0 lg:px-10 lg:py-7">
+          <div className="mx-auto flex w-full max-w-7xl flex-col gap-3 text-[clamp(0.95rem,1.45vw,2rem)] sm:flex-row sm:items-center sm:justify-between sm:gap-4">
             <p className="font-medium">
               ©2026 Unlock Housing All Rights Reserved.
             </p>
-            <div className="flex flex-wrap items-center gap-x-10 gap-y-3">
+            <div className="flex flex-wrap items-center gap-x-5 gap-y-2 sm:gap-x-10 sm:gap-y-3">
               <a href="#" className="transition-opacity hover:opacity-70">
                 Privacy Policy
               </a>
