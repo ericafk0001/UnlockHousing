@@ -143,7 +143,6 @@ export default function Home() {
         <InsightsCharts />
       </div>
 
-      <div className="hidden w-full lg:block lg:h-160" aria-hidden="true" />
       <footer className="relative z-0 border-t border-black/10 bg-[#1a1d23] text-white lg:sticky lg:bottom-0 lg:h-160">
         <div className="pointer-events-auto mx-auto flex w-full max-w-7xl flex-col gap-12 px-5 py-8 sm:px-8 sm:py-10 lg:h-full lg:justify-between lg:gap-0 lg:px-10 lg:py-10">
           <div>
