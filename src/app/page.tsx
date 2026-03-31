@@ -153,11 +153,13 @@ export default function Home() {
               >
                 Contact Us
               </a>
-              <span className="inline-flex h-[clamp(4rem,10vw,7.5rem)] w-[clamp(4rem,10vw,7.5rem)] shrink-0 items-center justify-center rounded-full bg-blue-500 text-[clamp(2.1rem,5vw,4rem)] leading-none text-white transition-transform duration-300 group-hover:transform-[rotateY(45deg)_rotateX(25deg)]">
-                <span className="inline-block transition-transform duration-300 transform-[rotate(-140deg)] group-hover:transform-[rotate(-140deg)_rotateY(45deg)_rotateX(25deg)]">
-                  ↓
+              <a href="/contact" aria-label="Contact Us Arrow">
+                <span className="inline-flex h-[clamp(4rem,10vw,7.5rem)] w-[clamp(4rem,10vw,7.5rem)] shrink-0 items-center justify-center rounded-full bg-blue-500 text-[clamp(2.1rem,5vw,4rem)] leading-none text-white transition-transform duration-300 group-hover:transform-[rotateY(45deg)_rotateX(25deg)]">
+                  <span className="inline-block transition-transform duration-300 transform-[rotate(-140deg)] group-hover:transform-[rotate(-140deg)_rotateY(45deg)_rotateX(25deg)]">
+                    ↓
+                  </span>
                 </span>
-              </span>
+              </a>
             </div>
           </div>
         </div>
